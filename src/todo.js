@@ -1,12 +1,14 @@
 class Todo {
-  constructor(title, desc, dueDate, priority) {
+  constructor(title, desc, dueDate, priority, dateAdded = new Date(), project = null) {
     this.id = Todo.id;
     Todo.setIdPoint(Todo.id + 1);
+    this.project = project;
     this.title = title;
     this.desc = desc;
-    this.dateAdded = new Date();
+    this.dateAdded = dateAdded;
     this.dueDate = dueDate;
     this.priority = priority;
+    this.completed = false;
   }
 
   static id = 1;

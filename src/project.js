@@ -2,15 +2,33 @@ class Project {
   todoList = [];
 
   constructor(name) {
+    this.id = Project.id;
+    Project.setIdPoint(Project.id + 1);
     this.name = name;
+  }
+
+  static id = 1;
+
+  static setIdPoint(newId) {
+    this.id = newId;
+  }
+
+  static applyData(json) {
+    return Object.assign(new Project(), json);
   }
 
   add(todoItem) {
     this.todoList.push(todoItem);
   }
 
-  remove(todoItem) {
-    this.todoList.forEach(todoItem);
+  find(itemIdToBeFound) {
+    return this.todoList.find((item) => item.id === itemIdToBeFound);
+  }
+
+  remove(itemToBeRemoved) {
+    const index = this.todoList.indexOf(itemToBeRemoved);
+    if (index === -1) { return; }
+    this.todoList.splice(index, 1);
   }
 
   getName() {
@@ -19,6 +37,10 @@ class Project {
 
   setName(name) {
     this.name = name;
+  }
+
+  getTodos() {
+    return this.todoList;
   }
 }
 
