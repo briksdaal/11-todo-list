@@ -15,6 +15,10 @@ class Todo {
     this.id = newId;
   }
 
+  static applyData(json) {
+    return Object.assign(new Todo(), json);
+  }
+
   getTitle() {
     return this.title;
   }
