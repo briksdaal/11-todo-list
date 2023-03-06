@@ -1,6 +1,46 @@
-.try {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: yellow;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+:root {
+  font-size: 18px;
+  --color-header: #da4b3e;
+  --color-white: #fff;
+  --color-grey: #fafafa;
+  --color-footer-grey: #f3f3f3;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+.todoApp {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    height: 2.5rem;
+    background-color: var(--color-header);
+    color: var(--color-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer {
+    height: 2.5rem;
+    background-color: var(--color-footer-grey);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
