@@ -1,13 +1,18 @@
 class Todo {
-  id = 1;
-
   constructor(title, desc, dueDate, priority) {
+    this.id = Todo.id;
+    Todo.setIdPoint(Todo.id + 1);
     this.title = title;
     this.desc = desc;
     this.dateAdded = new Date();
     this.dueDate = dueDate;
     this.priority = priority;
-    this.id = id;
+  }
+
+  static id = 1;
+
+  static setIdPoint(newId) {
+    this.id = newId;
   }
 
   getTitle() {

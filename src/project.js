@@ -9,6 +9,10 @@ class Project {
     this.todoList.push(todoItem);
   }
 
+  remove(todoItem) {
+    this.todoList.forEach(todoItem);
+  }
+
   getName() {
     return this.name;
   }

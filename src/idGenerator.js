@@ -1,4 +1,4 @@
-const idGenerator = (initVal = 1) => {
+const idGenerator = (initVal = 0) => {
   let id = initVal;
   const getNext = () => {
     id += 1;
