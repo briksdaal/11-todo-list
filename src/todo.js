@@ -1,9 +1,13 @@
 class Todo {
+  id = 1;
+
   constructor(title, desc, dueDate, priority) {
     this.title = title;
     this.desc = desc;
+    this.dateAdded = new Date();
     this.dueDate = dueDate;
     this.priority = priority;
+    this.id = id;
   }
 
   getTitle() {
@@ -14,8 +18,12 @@ class Todo {
     return this.desc;
   }
 
-  getDate() {
-    return this.dueDate;
+  getDueDate() {
+    return this.dueDue;
+  }
+
+  getDateAdded() {
+    return this.dateAdded;
   }
 
   getPriority() {
@@ -30,8 +38,12 @@ class Todo {
     this.desc = desc;
   }
 
-  setDate(dueDate) {
+  setDueDate(dueDate) {
     this.dueDate = dueDate;
+  }
+
+  setDateAdded(dateAdded) {
+    this.dateAdded = dateAdded;
   }
 
   setPriority(priority) {

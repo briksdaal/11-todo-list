@@ -1,6 +1,6 @@
 import newElement from './element';
 import getHeader from './header';
-import getMain from './main';
+import getMain from './mainContent';
 import getFooter from './footer';
 
 function initalize() {
