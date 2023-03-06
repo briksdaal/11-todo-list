@@ -3,7 +3,7 @@ import Project from './project';
 class ProjectList {
   list = [];
 
-  defaultProject = new Project();
+  defaultProject = new Project('default');
 
   constructor(name) {
     this.name = name;
@@ -13,12 +13,36 @@ class ProjectList {
     this.list.push(project);
   }
 
-  find(listIdToBeFound) {
-    return this.list.find((item) => item.id === listIdToBeFound);
+  addTodoToProjects(todoItem) {
+    if (todoItem.project) {
+      const projectToAddTo = this.findProject(todoItem.project);
+      projectToAddTo.add(todoItem);
+    }
+    this.defaultProject.add(todoItem);
   }
 
-  remove(listToBeRemoved) {
-    const index = this.list.indexOf(listToBeRemoved);
+  removeTodoFromProjects(todoItem) {
+    if (todoItem.project) {
+      const projectToBeRemovedFrom = this.findProject(todoItem.project);
+      projectToBeRemovedFrom.remove(todoItem);
+    }
+    this.defaultProject.remove(todoItem);
+  }
+
+  findProject(projectToBeFound) {
+    return this.list.find((item) => item.id === projectToBeFound);
+  }
+
+  findTodo(todoId) {
+    return this.defaultProject.find(todoId);
+  }
+
+  removeProject(projectToBeRemoved) {
+    projectToBeRemoved.getTodos().forEach((todo) => {
+      todo.setProject(null);
+    });
+
+    const index = this.list.indexOf(projectToBeRemoved);
     if (index === -1) { return; }
     this.list.splice(index, 1);
   }
@@ -32,7 +56,7 @@ class ProjectList {
   }
 
   getProjects() {
-    return this.list;
+    return [this.defaultProject, ...this.list];
   }
 }
 

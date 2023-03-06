@@ -2,9 +2,19 @@ import { add } from 'date-fns';
 import initalize from './initialize';
 import Todo from './todo';
 import Project from './project';
+import ProjectList from './projectList';
 import './style.css';
 
 initalize();
+
+const projects = [
+  {
+    name: 'House Bijinesu',
+  },
+  {
+    name: 'Getting fit and healthy',
+  },
+];
 
 const todos = [
   {
@@ -20,7 +30,7 @@ const todos = [
     desc: 'Haha as if the gym is boring',
     priority: 3,
     dueDate: add(new Date(), { days: 1 }),
-    project: 2,
+    project: 3,
   },
   {
     dateAdded: add(new Date(), { days: -2 }),
@@ -28,7 +38,7 @@ const todos = [
     desc: 'This I really should be doing more',
     priority: 1,
     dueDate: add(new Date(), { days: 7 }),
-    project: 2,
+    project: 3,
   },
   {
     dateAdded: add(new Date(), { days: -1 }),
@@ -36,36 +46,47 @@ const todos = [
     desc: 'If you bake more you save more money',
     priority: 2,
     dueDate: add(new Date(), { days: 12 }),
-    project: 1,
+    project: 2,
   },
   {
     title: '5 Clean the house',
     desc: 'It\'s really gotten quite dirty',
     priority: 1,
     dueDate: add(new Date(), { days: 1 }),
-    project: 1,
+    project: 2,
   },
 ];
 
-const defaultProject = new Project('default');
+const projectList = new ProjectList();
 
-todos.forEach((todo) => {
-  defaultProject.add(
-    Todo.applyData(todo),
-    // new Todo(
-    //   todo.title,
-    //   todo.desc,
-    //   todo.dueDate,
-    //   todo.priority,
-    //   todo.dateAdded,
-    //   todo.project,
-    // ),
+projects.forEach((project) => {
+  projectList.add(
+    Project.applyData(project),
   );
 });
 
-console.table(defaultProject.getTodos());
+todos.forEach((todo) => {
+  projectList.addTodoToProjects(Todo.applyData(todo));
+});
 
-// const itemRemoved = defaultProject.find(2);
-// console.log(itemRemoved);
-// defaultProject.remove(itemRemoved);
+projectList.getProjects().forEach((project) => {
+  console.table(project);
+});
+
+console.log('break');
+
+// const todoI = projectList.findTodo(4);
+// projectList.removeTodoFromProjects(todoI);
+
+// projectList.getProjects().forEach((project) => {
+//   console.table(project);
+// });
+
+// console.table();
 // console.table(defaultProject.getTodos());
+
+projectList.removeProject(projectList.findProject(3));
+
+projectList.getProjects().forEach((project) => {
+  console.table(project);
+});

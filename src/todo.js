@@ -41,6 +41,10 @@ class Todo {
     return this.priority;
   }
 
+  getProject() {
+    return this.project;
+  }
+
   setTitle(title) {
     this.title = title;
   }
@@ -59,6 +63,10 @@ class Todo {
 
   setPriority(priority) {
     this.priority = priority;
+  }
+
+  setProject(project) {
+    this.project = project;
   }
 }
 
