@@ -5,14 +5,6 @@ class ProjectList {
 
   defaultProject = new Project('default');
 
-  constructor(name) {
-    this.name = name;
-  }
-
-  add(project) {
-    this.list.push(project);
-  }
-
   addTodoToProjects(todoItem) {
     if (todoItem.project) {
       const projectToAddTo = this.findProject(todoItem.project);
@@ -27,6 +19,10 @@ class ProjectList {
       projectToBeRemovedFrom.remove(todoItem);
     }
     this.defaultProject.remove(todoItem);
+  }
+
+  addProject(project) {
+    this.list.push(project);
   }
 
   findProject(projectToBeFound) {
