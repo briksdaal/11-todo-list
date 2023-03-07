@@ -73,6 +73,7 @@ class TodoManager {
 
   changeTodoProject(todoItem, projectItem) {
     this.projectList.changeTodoProject(todoItem, projectItem);
+    this.updateLocalStorage();
   }
 
   updateTodo(todoItem, prop) {
