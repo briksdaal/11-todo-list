@@ -9,6 +9,10 @@ class Project {
 
   static id = 1;
 
+  static getIdPoint() {
+    return this.id;
+  }
+
   static setIdPoint(newId) {
     this.id = newId;
   }
@@ -41,6 +45,16 @@ class Project {
 
   getTodos() {
     return this.todoList;
+  }
+
+  getTodosMinimized() {
+    return this.todoList.map((todo) => (
+      {
+        title: todo.title,
+        dueDate: todo.dueDate,
+        priority: todo.priority,
+      }
+    ));
   }
 }
 

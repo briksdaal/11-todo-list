@@ -5,6 +5,10 @@ class ProjectList {
 
   defaultProject = new Project('default');
 
+  findTodo(todoId) {
+    return this.defaultProject.find(todoId);
+  }
+
   addTodoToProjects(todoItem) {
     if (todoItem.project) {
       const projectToAddTo = this.findProject(todoItem.project);
@@ -21,16 +25,12 @@ class ProjectList {
     this.defaultProject.remove(todoItem);
   }
 
-  addProject(project) {
-    this.list.push(project);
-  }
-
   findProject(projectToBeFound) {
     return this.list.find((item) => item.id === projectToBeFound);
   }
 
-  findTodo(todoId) {
-    return this.defaultProject.find(todoId);
+  addProject(project) {
+    this.list.push(project);
   }
 
   removeProject(projectToBeRemoved) {
@@ -43,16 +43,33 @@ class ProjectList {
     this.list.splice(index, 1);
   }
 
-  getName() {
-    return this.name;
-  }
-
-  setName(name) {
-    this.name = name;
-  }
-
   getProjects() {
     return [this.defaultProject, ...this.list];
+  }
+
+  exportProjects() {
+    return this.list.map((project) => ({
+      name: project.name,
+      id: project.id,
+    }));
+  }
+
+  exportTodos() {
+    return this.defaultProject.getTodos();
+    // .map(
+    //   (todo) => {
+    //     completed: false
+    //     this.id = Todo.id;
+    //     Todo.setIdPoint(Todo.id + 1);
+    //     this.project = project;
+    //     this.title = title;
+    //     this.desc = desc;
+    //     this.dateAdded = dateAdded;
+    //     this.dueDate = dueDate;
+    //     this.priority = priority;
+    //     this.completed = false;
+    //   },
+    // );
   }
 }
 

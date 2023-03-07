@@ -13,12 +13,24 @@ class Todo {
 
   static id = 1;
 
+  static getIdPoint() {
+    return this.id;
+  }
+
   static setIdPoint(newId) {
     this.id = newId;
   }
 
   static applyData(json) {
     return Object.assign(new Todo(), json);
+  }
+
+  getJson() {
+    return JSON.stringify(this);
+  }
+
+  update(json) {
+    Object.assign(this, json);
   }
 
   getTitle() {
