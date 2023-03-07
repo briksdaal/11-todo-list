@@ -1,27 +1,31 @@
 import Todo from './todo';
 import Project from './project';
 import ProjectList from './projectList';
-// import { todoData, projectsData } from './data';
-// import { todosJSON, projectsJSON } from './dataJson';
+import {
+  todosJSON as seedTodosJSON,
+  projectsJSON as seedProjectsJSON,
+} from './dataJson';
 
 class TodoManager {
-  projectList = new ProjectList();
-
   constructor() {
+    this.projectList = new ProjectList();
+    TodoManager.seedLocalStorage();
     this.loadFromLocalStorage();
-    // projectsData.forEach((projectJson) => {
-    //   this.addProject(
-    //     Project.applyData(projectJson),
-    //   );
-    // });
+  }
 
-    // todoData.forEach((todoJson) => {
-    //   this.addTodo(Todo.applyData(todoJson));
-    // });
+  static seedLocalStorage() {
+    if (!localStorage.getItem('projectsJSON')) {
+      localStorage.setItem('projectsJSON', seedProjectsJSON);
+    }
+    if (!localStorage.getItem('todosJSON')) {
+      localStorage.setItem('todosJSON', seedTodosJSON);
+    }
   }
 
   loadFromLocalStorage() {
     const projectsJSON = localStorage.getItem('projectsJSON');
+    if (!projectsJSON) { return; }
+
     const projectsData = JSON.parse(projectsJSON);
     projectsData.projectsListForExport.forEach((project) => {
       this.addProject(
@@ -31,6 +35,7 @@ class TodoManager {
     Project.setIdPoint(projectsData.currentProjectId);
 
     const todosJSON = localStorage.getItem('todosJSON');
+    if (!todosJSON) { return; }
     const todosData = JSON.parse(todosJSON);
     todosData.todosListForExport.forEach((todo) => {
       this.addTodo(
