@@ -29,56 +29,64 @@ class Todo {
     return JSON.stringify(this);
   }
 
-  update(json) {
-    Object.assign(this, json);
+  update(prop) {
+    Object.assign(this, prop);
   }
 
-  getTitle() {
-    return this.title;
+  setCompleted() {
+    this.completed = true;
   }
 
-  getDesc() {
-    return this.desc;
+  setUncompleted() {
+    this.completed = false;
   }
 
-  getDueDate() {
-    return this.dueDue;
-  }
+  // getTitle() {
+  //   return this.title;
+  // }
 
-  getDateAdded() {
-    return this.dateAdded;
-  }
+  // getDesc() {
+  //   return this.desc;
+  // }
 
-  getPriority() {
-    return this.priority;
+  // getDueDate() {
+  //   return this.dueDue;
+  // }
+
+  // getDateAdded() {
+  //   return this.dateAdded;
+  // }
+
+  // getPriority() {
+  //   return this.priority;
+  // }
+
+  // setTitle(title) {
+  //   this.title = title;
+  // }
+
+  // setDesc(desc) {
+  //   this.desc = desc;
+  // }
+
+  // setDueDate(dueDate) {
+  //   this.dueDate = dueDate;
+  // }
+
+  // setDateAdded(dateAdded) {
+  //   this.dateAdded = dateAdded;
+  // }
+
+  // setPriority(priority) {
+  //   this.priority = priority;
+  // }
+
+  setProject(project) {
+    this.project = project;
   }
 
   getProject() {
     return this.project;
-  }
-
-  setTitle(title) {
-    this.title = title;
-  }
-
-  setDesc(desc) {
-    this.desc = desc;
-  }
-
-  setDueDate(dueDate) {
-    this.dueDate = dueDate;
-  }
-
-  setDateAdded(dateAdded) {
-    this.dateAdded = dateAdded;
-  }
-
-  setPriority(priority) {
-    this.priority = priority;
-  }
-
-  setProject(project) {
-    this.project = project;
   }
 }
 

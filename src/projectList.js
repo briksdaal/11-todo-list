@@ -25,8 +25,29 @@ class ProjectList {
     this.defaultProject.remove(todoItem);
   }
 
-  findProject(projectToBeFound) {
-    return this.list.find((item) => item.id === projectToBeFound);
+  changeTodoProject(todoItem, project) {
+    const curTodoProjectId = todoItem.getProject();
+    if (!curTodoProjectId) {
+      if (project !== this.defaultProject) {
+        project.add(todoItem);
+        todoItem.setProject(project.id);
+      }
+    } else if (curTodoProjectId !== project.id) {
+      const curTodoProject = this.findProject(curTodoProjectId);
+      curTodoProject.remove(todoItem);
+      todoItem.setProject(null);
+      if (project !== this.defaultProject) {
+        project.add(todoItem);
+        todoItem.setProject(project.id);
+      }
+    }
+  }
+
+  findProject(projectIdToBeFound) {
+    if (projectIdToBeFound == null || projectIdToBeFound === 1) {
+      return this.defaultProject;
+    }
+    return this.list.find((item) => item.id === projectIdToBeFound);
   }
 
   addProject(project) {
@@ -56,20 +77,6 @@ class ProjectList {
 
   exportTodos() {
     return this.defaultProject.getTodos();
-    // .map(
-    //   (todo) => {
-    //     completed: false
-    //     this.id = Todo.id;
-    //     Todo.setIdPoint(Todo.id + 1);
-    //     this.project = project;
-    //     this.title = title;
-    //     this.desc = desc;
-    //     this.dateAdded = dateAdded;
-    //     this.dueDate = dueDate;
-    //     this.priority = priority;
-    //     this.completed = false;
-    //   },
-    // );
   }
 }
 

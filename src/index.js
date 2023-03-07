@@ -4,14 +4,21 @@ import Todo from './todo';
 import Project from './project';
 import './style.css';
 
+localStorage.clear();
 initalize();
 const todoManagerInst = new TodoManager();
 
-// localStorage.clear();
+const proj = todoManagerInst.findProject(2);
+const todo = todoManagerInst.findTodo(1);
+console.log(todo);
+todoManagerInst.changeTodoProject(todo, proj);
+console.log(todo);
+
+// todoManagerInst.removeProject(proj3);
 
 const log = todoManagerInst.projectList.defaultProject.getTodos();
-console.log('instance state:');
+// console.log('instance state:');
 console.log(todoManagerInst);
-console.log('end');
-console.log(`cur: ${Project.getIdPoint()}`);
-console.log(`cur: ${Todo.getIdPoint()}`);
+// console.log('end');
+// console.log(`cur: ${Project.getIdPoint()}`);
+// console.log(`cur: ${Todo.getIdPoint()}`);

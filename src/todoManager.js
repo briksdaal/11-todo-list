@@ -24,7 +24,8 @@ class TodoManager {
 
   loadFromLocalStorage() {
     const projectsJSON = localStorage.getItem('projectsJSON');
-    if (!projectsJSON) { return; }
+    const todosJSON = localStorage.getItem('todosJSON');
+    if (!projectsJSON || !todosJSON) { return; }
 
     const projectsData = JSON.parse(projectsJSON);
     projectsData.projectsListForExport.forEach((project) => {
@@ -34,8 +35,6 @@ class TodoManager {
     });
     Project.setIdPoint(projectsData.currentProjectId);
 
-    const todosJSON = localStorage.getItem('todosJSON');
-    if (!todosJSON) { return; }
     const todosData = JSON.parse(todosJSON);
     todosData.todosListForExport.forEach((todo) => {
       this.addTodo(
@@ -43,6 +42,11 @@ class TodoManager {
       );
     });
     Todo.setIdPoint(todosData.currentTodoId);
+  }
+
+  updateLocalStorage() {
+    localStorage.setItem('projectsJSON', this.exportProjectsJSON());
+    localStorage.setItem('todosJSON', this.exportTodosJSON());
   }
 
   findTodo(todoId) {
@@ -55,6 +59,7 @@ class TodoManager {
       projectToAddTo.add(todoItem);
     }
     this.projectList.defaultProject.add(todoItem);
+    this.updateLocalStorage();
   }
 
   removeTodo(todoItem) {
@@ -63,6 +68,26 @@ class TodoManager {
       projectToBeRemovedFrom.remove(todoItem);
     }
     this.projectList.defaultProject.remove(todoItem);
+    this.updateLocalStorage();
+  }
+
+  changeTodoProject(todoItem, projectItem) {
+    this.projectList.changeTodoProject(todoItem, projectItem);
+  }
+
+  updateTodo(todoItem, prop) {
+    todoItem.update(prop);
+    this.updateLocalStorage();
+  }
+
+  markTodoAsCompleted(todoItem) {
+    todoItem.setCompleted();
+    this.updateLocalStorage();
+  }
+
+  markTodoAsUncompleted(todoItem) {
+    todoItem.setUncompleted();
+    this.updateLocalStorage();
   }
 
   findProject(projectId) {
@@ -70,11 +95,18 @@ class TodoManager {
   }
 
   addProject(projectItem) {
-    return this.projectList.addProject(projectItem);
+    this.projectList.addProject(projectItem);
+    this.updateLocalStorage();
   }
 
   removeProject(projectItem) {
-    return this.projectList.removeProject(projectItem);
+    this.projectList.removeProject(projectItem);
+    this.updateLocalStorage();
+  }
+
+  setProjectName(projectItem, name) {
+    projectItem.setName(name);
+    this.updateLocalStorage();
   }
 
   exportProjectsJSON() {

@@ -35,9 +35,9 @@ class Project {
     this.todoList.splice(index, 1);
   }
 
-  getName() {
-    return this.name;
-  }
+  // getName() {
+  //   return this.name;
+  // }
 
   setName(name) {
     this.name = name;
