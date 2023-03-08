@@ -10,15 +10,25 @@ class ProjectList {
   }
 
   addTodoToProjects(todoItem) {
-    if (todoItem.project) {
+    if (!todoItem) {
+      console.log('addTodoToProjects error');
+      return;
+    }
+    if (todoItem.project && todoItem.project !== 1) {
       const projectToAddTo = this.findProject(todoItem.project);
-      projectToAddTo.add(todoItem);
+      if (projectToAddTo) {
+        projectToAddTo.add(todoItem);
+      }
     }
     this.defaultProject.add(todoItem);
   }
 
   removeTodoFromProjects(todoItem) {
-    if (todoItem.project) {
+    if (!todoItem) {
+      console.log('removeTodoFromProjects error');
+      return;
+    }
+    if (todoItem.project && todoItem.project !== 1) {
       const projectToBeRemovedFrom = this.findProject(todoItem.project);
       projectToBeRemovedFrom.remove(todoItem);
     }
@@ -26,6 +36,10 @@ class ProjectList {
   }
 
   changeTodoProject(todoItem, project) {
+    if (!todoItem) {
+      console.log('changeTodoProject error');
+      return;
+    }
     const curTodoProjectId = todoItem.getProject();
     if (!curTodoProjectId) {
       if (project !== this.defaultProject) {
@@ -51,10 +65,18 @@ class ProjectList {
   }
 
   addProject(project) {
+    if (!project) {
+      console.log('addProject error');
+      return;
+    }
     this.list.push(project);
   }
 
   removeProject(projectToBeRemoved) {
+    if (!projectToBeRemoved) {
+      console.log('removeProject error');
+      return;
+    }
     projectToBeRemoved.getTodos().forEach((todo) => {
       todo.setProject(null);
     });

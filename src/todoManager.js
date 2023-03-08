@@ -1,13 +1,11 @@
 import Todo from './todo';
 import Project from './project';
 import ProjectList from './projectList';
-import {
-  todosJSON as seedTodosJSON,
-  projectsJSON as seedProjectsJSON,
-} from './dataJson';
+import { todoData as seedTodosJSON, projectsData as seedProjectsJSON } from './dataSeed';
 
 class TodoManager {
-  constructor() {
+  constructor(bool) {
+    if (bool) { localStorage.clear(); }
     this.projectList = new ProjectList();
     TodoManager.seedLocalStorage();
     this.loadFromLocalStorage();
@@ -15,18 +13,20 @@ class TodoManager {
 
   static seedLocalStorage() {
     if (!localStorage.getItem('projectsJSON')) {
-      localStorage.setItem('projectsJSON', seedProjectsJSON);
+      localStorage.setItem('projectsJSON', JSON.stringify(seedProjectsJSON));
     }
     if (!localStorage.getItem('todosJSON')) {
-      localStorage.setItem('todosJSON', seedTodosJSON);
+      localStorage.setItem('todosJSON', JSON.stringify(seedTodosJSON));
     }
   }
 
   loadFromLocalStorage() {
     const projectsJSON = localStorage.getItem('projectsJSON');
     const todosJSON = localStorage.getItem('todosJSON');
-    if (!projectsJSON || !todosJSON) { return; }
-
+    if (!projectsJSON || !todosJSON) {
+      localStorage.clear();
+      return;
+    }
     const projectsData = JSON.parse(projectsJSON);
     projectsData.projectsListForExport.forEach((project) => {
       this.addProject(
@@ -34,6 +34,7 @@ class TodoManager {
       );
     });
     Project.setIdPoint(projectsData.currentProjectId);
+    this.updateLocalStorage();
 
     const todosData = JSON.parse(todosJSON);
     todosData.todosListForExport.forEach((todo) => {
@@ -42,6 +43,7 @@ class TodoManager {
       );
     });
     Todo.setIdPoint(todosData.currentTodoId);
+    this.updateLocalStorage();
   }
 
   updateLocalStorage() {
@@ -54,20 +56,12 @@ class TodoManager {
   }
 
   addTodo(todoItem) {
-    if (todoItem.project) {
-      const projectToAddTo = this.projectList.findProject(todoItem.project);
-      projectToAddTo.add(todoItem);
-    }
-    this.projectList.defaultProject.add(todoItem);
+    this.projectList.addTodoToProjects(todoItem);
     this.updateLocalStorage();
   }
 
   removeTodo(todoItem) {
-    if (todoItem.project) {
-      const projectToBeRemovedFrom = this.projectList.findProject(todoItem.project);
-      projectToBeRemovedFrom.remove(todoItem);
-    }
-    this.projectList.defaultProject.remove(todoItem);
+    this.projectList.removeTodoFromProjects(todoItem);
     this.updateLocalStorage();
   }
 

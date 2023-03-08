@@ -5,20 +5,10 @@ import Project from './project';
 import './style.css';
 
 initalize();
-const todoManagerInst = new TodoManager();
+const todoManagerInst = new TodoManager(true);
+// todoManagerInst.addProject(new Project('asd'));
+// todoManagerInst.removeTodo(todoManagerInst.findTodo(7));
+// todoManagerInst.removeProject(todoManagerInst.findProject(17));
 
-const proj = todoManagerInst.findProject(2);
-const todo = todoManagerInst.findTodo(1);
-// console.log(todo);
-todoManagerInst.changeTodoProject(todo, proj);
-// console.log(todo);
-
-// todoManagerInst.removeProject(proj3);
-
-const log = todoManagerInst.projectList.defaultProject.getTodos();
-// console.log('instance state:');
-console.table(todoManagerInst.projectList.defaultProject.todoList);
-console.log(todoManagerInst);
-// console.log('end');
-// console.log(`cur: ${Project.getIdPoint()}`);
-// console.log(`cur: ${Todo.getIdPoint()}`);
+console.table(todoManagerInst.projectList.defaultProject.getTodos());
+console.table(todoManagerInst.projectList.getProjects());
