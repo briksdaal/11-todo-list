@@ -32,9 +32,8 @@
 
 .main {
     flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 400px 1fr;
 }
 
 .footer {

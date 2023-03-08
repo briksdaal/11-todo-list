@@ -18,6 +18,8 @@ class ProjectList {
       const projectToAddTo = this.findProject(todoItem.project);
       if (projectToAddTo) {
         projectToAddTo.add(todoItem);
+      } else {
+        todoItem.setProject(null);
       }
     }
     this.defaultProject.add(todoItem);

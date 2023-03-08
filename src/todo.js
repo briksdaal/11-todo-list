@@ -1,5 +1,7 @@
+import isDate from 'date-fns/isDate';
+
 class Todo {
-  constructor(title, desc, dueDate, priority, dateAdded = new Date(), project = null) {
+  constructor(title = null, desc = null, dueDate = null, priority = null, dateAdded = new Date(), project = null) {
     this.id = Todo.id;
     Todo.setIdPoint(Todo.id + 1);
     this.project = project;
@@ -22,8 +24,26 @@ class Todo {
   }
 
   static applyData(json) {
-    return Object.assign(new Todo(), json);
+    return Object.assign(
+      new Todo(),
+      json,
+      { dueDate: json.dueDate ? this.dateManager(json.dueDate) : null },
+    );
   }
+
+  static dateManager(date) {
+    if (isDate(date)) {
+      return JSON.parse(JSON.stringify(date));
+    }
+
+    return date;
+  }
+
+  // static dateParserAndFormatter(date) {
+  //   const tempDate = parseJSON(date);
+  //   if (!isDate(tempDate)) return date;
+  //   return format(tempDate, 'MM/dd/yyyy');
+  // }
 
   getJson() {
     return JSON.stringify(this);

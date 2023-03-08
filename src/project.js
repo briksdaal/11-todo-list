@@ -1,3 +1,7 @@
+import compareAsc from 'date-fns/compareAsc';
+import parseJSON from 'date-fns/parseJSON';
+import isDate from 'date-fns/isDate';
+
 class Project {
   todoList = [];
 
@@ -47,14 +51,25 @@ class Project {
     return this.todoList;
   }
 
-  getTodosMinimized() {
+  getTodosForScreen() {
     return this.todoList.map((todo) => (
       {
         title: todo.title,
+        id: todo.id,
         dueDate: todo.dueDate,
         priority: todo.priority,
       }
-    ));
+    ))
+      .sort((a, b) => {
+        if (!a.dueDate) {
+          return -1;
+        } if (!b.dueDate) return 1;
+
+        return compareAsc(
+          parseJSON(a.dueDate),
+          parseJSON(b.dueDate),
+        );
+      });
   }
 }
 

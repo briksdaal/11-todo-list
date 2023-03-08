@@ -9,6 +9,7 @@ class TodoManager {
     this.projectList = new ProjectList();
     TodoManager.seedLocalStorage();
     this.loadFromLocalStorage();
+    this.updateLocalStorage();
   }
 
   static seedLocalStorage() {
@@ -31,19 +32,20 @@ class TodoManager {
     projectsData.projectsListForExport.forEach((project) => {
       this.addProject(
         Project.applyData(project),
+        false,
       );
     });
     Project.setIdPoint(projectsData.currentProjectId);
-    this.updateLocalStorage();
 
     const todosData = JSON.parse(todosJSON);
     todosData.todosListForExport.forEach((todo) => {
+      // todo.dueDate = t
       this.addTodo(
         Todo.applyData(todo),
+        false,
       );
     });
     Todo.setIdPoint(todosData.currentTodoId);
-    this.updateLocalStorage();
   }
 
   updateLocalStorage() {
@@ -51,13 +53,19 @@ class TodoManager {
     localStorage.setItem('todosJSON', this.exportTodosJSON());
   }
 
+  static createTodo(object) {
+    return Todo.applyData(object);
+  }
+
   findTodo(todoId) {
     return this.projectList.findTodo(todoId);
   }
 
-  addTodo(todoItem) {
+  addTodo(todoItem, update = true) {
     this.projectList.addTodoToProjects(todoItem);
-    this.updateLocalStorage();
+    if (update) {
+      this.updateLocalStorage();
+    }
   }
 
   removeTodo(todoItem) {
@@ -85,13 +93,19 @@ class TodoManager {
     this.updateLocalStorage();
   }
 
+  static createProject(object) {
+    return Project.applyData(object);
+  }
+
   findProject(projectId) {
     return this.projectList.findProject(projectId);
   }
 
-  addProject(projectItem) {
+  addProject(projectItem, update = true) {
     this.projectList.addProject(projectItem);
-    this.updateLocalStorage();
+    if (update) {
+      this.updateLocalStorage();
+    }
   }
 
   removeProject(projectItem) {
