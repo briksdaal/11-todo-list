@@ -1,7 +1,14 @@
 import isDate from 'date-fns/isDate';
 
 class Todo {
-  constructor(title = null, desc = null, dueDate = null, priority = null, dateAdded = new Date(), project = null) {
+  constructor(
+    title = null,
+    desc = null,
+    dueDate = null,
+    priority = null,
+    dateAdded = new Date(),
+    project = null,
+  ) {
     this.id = Todo.id;
     Todo.setIdPoint(Todo.id + 1);
     this.project = project;

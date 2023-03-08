@@ -1,4 +1,4 @@
-import newElement from './element';
+import { newElement } from './domHelperFunctions';
 import getHeader from './header';
 import getMain from './mainContent';
 import getFooter from './footer';

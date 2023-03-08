@@ -19,7 +19,7 @@ const todoData = {
     {
       id: 1 + 6,
       dateAdded: add(new Date(), { days: -5, hours: -10 }),
-      title: '1 Buy Milk',
+      title: 'Buy Milk',
       desc: '1 liter should do it for this week',
       priority: 2,
       dueDate: add(new Date(), { days: 10, hours: -2 }),
@@ -27,16 +27,16 @@ const todoData = {
     {
       id: 2 + 6,
       dateAdded: add(new Date(), { days: -7 }),
-      title: '2 Work out',
+      title: 'Work out',
       desc: 'Haha as if the gym is boring',
       priority: 3,
-      dueDate: add(new Date(), { days: 1 }),
+      dueDate: add(new Date(), { days: 27 }),
       project: 3 + 5,
     },
     {
       id: 3 + 6,
       dateAdded: add(new Date(), { days: -2 }),
-      title: '3 Swim',
+      title: 'Swim',
       desc: 'This I really should be doing more',
       priority: 1,
       dueDate: add(new Date(), { days: 7 }),
@@ -45,7 +45,7 @@ const todoData = {
     {
       id: 4 + 6,
       dateAdded: add(new Date(), { days: -1 }),
-      title: '4 Bake bread',
+      title: 'Bake bread',
       desc: 'If you bake more you save more money',
       priority: 2,
       dueDate: add(new Date(), { days: 12 }),
@@ -54,7 +54,7 @@ const todoData = {
     {
       id: 5 + 6,
       dateAdded: add(new Date(), { days: -10 }),
-      title: '5 Clean the house',
+      title: 'Clean the house',
       desc: 'It\'s really gotten quite dirty',
       priority: 1,
       dueDate: add(new Date(), { days: 1 }),

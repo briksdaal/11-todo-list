@@ -1,6 +1,5 @@
 import compareAsc from 'date-fns/compareAsc';
 import parseJSON from 'date-fns/parseJSON';
-import isDate from 'date-fns/isDate';
 
 class Project {
   todoList = [];
@@ -39,9 +38,9 @@ class Project {
     this.todoList.splice(index, 1);
   }
 
-  // getName() {
-  //   return this.name;
-  // }
+  getName() {
+    return this.name;
+  }
 
   setName(name) {
     this.name = name;
@@ -58,6 +57,7 @@ class Project {
         id: todo.id,
         dueDate: todo.dueDate,
         priority: todo.priority,
+        completed: todo.completed,
       }
     ))
       .sort((a, b) => {

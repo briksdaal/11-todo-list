@@ -118,6 +118,10 @@ class TodoManager {
     this.updateLocalStorage();
   }
 
+  exportProjects() {
+    return this.projectList.exportProjects();
+  }
+
   exportProjectsJSON() {
     const projectsListForExport = this.projectList.exportProjects();
     const currentProjectId = Project.getIdPoint();
