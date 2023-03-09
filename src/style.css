@@ -7,6 +7,12 @@
   --color-grey: #fafafa;
   --color-footer-grey: #f3f3f3;
   --color-modal-bg: #1c1c1c9e;
+  --high-priority-border: #d1453b;
+  --high-priority-bg: #d145391a;
+  --mid-priority-border: #eb8909;
+  --mid-priority-bg: #eb89091a;
+  --low-priority-border: #246fe0;
+  --low-priority-bg: #246fe01a;
 }
 
 * {
@@ -49,6 +55,8 @@ body {
 
 .project-container {
   padding: 30px 55px 30px 55px;
+  width: 1000px;
+  margin: 0 auto;
 }
 
 .footer {
@@ -79,4 +87,71 @@ body {
 
 .hidden {
   display: none;
+}
+
+.todos-list {
+  list-style: none;
+}
+
+.todo-container {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: center;
+  column-gap: 0.6rem;
+  grid-template-columns: auto 1fr auto;
+}
+
+.todo-li[data-completed="true"] .todo-container {
+  color: #8f8f8f;
+}
+
+.todo-li[data-completed="true"] .todo-title {
+  text-decoration: line-through;
+}
+
+.todo-date {
+  justify-self: end;
+}
+
+.todo-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.todo-circle[data-priority="1"] {
+  color: var(--high-priority-border);
+  border-color: var(--high-priority-border);
+  background: var(--high-priority-bg);
+}
+
+.todo-circle[data-priority="2"] {
+  color: var(--mid-priority-border);
+  border-color: var(--mid-priority-border);
+  background: var(--mid-priority-bg);
+}
+
+.todo-circle[data-priority="3"] {
+  color: var(--low-priority-border);
+  border-color: var(--low-priority-border);
+  background: var(--low-priority-bg);
+}
+
+
+.todo-li[data-completed="false"] .todo-circle:hover::before {
+  content: "✓";
+  font-size: 0.7rem;
+}
+
+.todo-li[data-completed="true"] .todo-circle:hover::before {
+  content: "×";
+  font-size: 0.8rem;
 }

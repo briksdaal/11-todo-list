@@ -10,4 +10,11 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export { $, $$, capitalize };
+function parseBoolString(string) {
+  if (string === 'true') { return true; }
+  return false;
+}
+
+export {
+  $, $$, capitalize, parseBoolString,
+};

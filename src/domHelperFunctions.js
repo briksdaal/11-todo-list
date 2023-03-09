@@ -36,9 +36,9 @@ function newMenuLi(name, dataObj) {
 }
 
 function newTodoLi(todo) {
-  const li = newElement('li', null, null, null, { todoId: todo.id, completed: todo.completed });
+  const li = newElement('li', 'todo-li', null, null, { todoId: todo.id, completed: todo.completed });
   const innerContainer = newElement('div', 'todo-container');
-  const completeCircle = newElement('div', 'todo-circle', todo.priority);
+  const completeCircle = newElement('div', 'todo-circle', null, null, { priority: todo.priority });
   const title = newElement('h3', 'todo-title', todo.title);
   const dueDate = newElement('p', 'todo-date', format(parseJSON(todo.dueDate), 'do MMMM, y'));
   innerContainer.appendChild(completeCircle);

@@ -1,6 +1,8 @@
 import parseISO from 'date-fns/parseISO';
 import { newElement, newMenuLi, newTodoLi } from './domHelperFunctions';
-import { $, $$, capitalize } from './helperFunctions';
+import {
+  $, $$, capitalize, parseBoolString,
+} from './helperFunctions';
 import TodoManager from './todoManager';
 import { getTodoForm, getProjectForm } from './modal';
 
@@ -70,14 +72,16 @@ class ScreenController {
     this.modal.addEventListener('click', this.clickHandlerModal.bind(this));
 
     this.submit.addEventListener('click', this.clickHandlerSubmit.bind(this));
+
+    this.todosList.addEventListener('click', this.clickHandlerTodosList.bind(this));
   }
 
   clickHandlerProjectsMenu(e) {
     if (!e.target.dataset.projectId) {
       return;
     }
-    const projectId = +e.target.dataset.projectId;
-    const dateFilter = +e.target.dataset.dateFilter;
+    const { projectId } = e.target.dataset;
+    const { dateFilter } = e.target.dataset;
 
     this.updateProjectContainer(projectId, dateFilter);
   }
@@ -118,8 +122,23 @@ class ScreenController {
         project: +e.target.form.project.value,
       });
       this.todoManagerInst.addTodo(newTodo);
-      this.updateProjectContainer();
+      this.updateProjectContainer(this.projectContainer.dataset.projectId);
       this.closeModal();
+    }
+  }
+
+  clickHandlerTodosList(e) {
+    if (e.target.classList.contains('todo-circle')) {
+      const todoLi = e.target.closest('li');
+      const { todoId } = todoLi.dataset;
+      const todoItem = this.todoManagerInst.findTodo(todoId);
+      const completedState = parseBoolString(todoLi.dataset.completed);
+      if (!completedState) {
+        this.todoManagerInst.markTodoAsCompleted(todoItem);
+      } else {
+        this.todoManagerInst.markTodoAsUncompleted(todoItem);
+      }
+      this.updateProjectContainer(this.projectContainer.dataset.projectId);
     }
   }
 

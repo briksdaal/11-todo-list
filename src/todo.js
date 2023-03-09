@@ -66,6 +66,10 @@ class Todo {
     Object.assign(this, prop);
   }
 
+  isCompleted() {
+    return this.completed === true;
+  }
+
   setCompleted() {
     this.completed = true;
   }

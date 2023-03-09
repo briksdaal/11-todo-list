@@ -58,7 +58,7 @@ class TodoManager {
   }
 
   findTodo(todoId) {
-    return this.projectList.findTodo(todoId);
+    return this.projectList.findTodo(+todoId);
   }
 
   addTodo(todoItem, update = true) {
@@ -98,7 +98,7 @@ class TodoManager {
   }
 
   findProject(projectId) {
-    return this.projectList.findProject(projectId);
+    return this.projectList.findProject(+projectId);
   }
 
   addProject(projectItem, update = true) {
@@ -119,6 +119,10 @@ class TodoManager {
   }
 
   exportProjects() {
+    return this.projectList.exportProjects();
+  }
+
+  exportTodos() {
     return this.projectList.exportProjects();
   }
 
