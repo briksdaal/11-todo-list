@@ -1,5 +1,8 @@
 import compareAsc from 'date-fns/compareAsc';
 import parseJSON from 'date-fns/parseJSON';
+import isToday from 'date-fns/isToday';
+import format from 'date-fns/format';
+import isThisWeek from 'date-fns/isThisWeek';
 
 class Project {
   todoList = [];
@@ -50,8 +53,8 @@ class Project {
     return this.todoList;
   }
 
-  getTodosForScreen() {
-    return this.todoList.map((todo) => (
+  getTodosForScreen(filter = 0) {
+    const tempTodos = this.todoList.map((todo) => (
       {
         title: todo.title,
         id: todo.id,
@@ -70,6 +73,17 @@ class Project {
           parseJSON(b.dueDate),
         );
       });
+      // 0 - all, 1 - today, 2 - upcoming week
+    if (+filter === 1) {
+      return tempTodos.filter((todo) => isToday(parseJSON(todo.dueDate)));
+    }
+    if (+filter === 2) {
+      const today = format(new Date(), 'i');
+      return tempTodos.filter(
+        (todo) => isThisWeek(parseJSON(todo.dueDate), { weekStartsOn: today }),
+      );
+    }
+    return tempTodos;
   }
 }
 

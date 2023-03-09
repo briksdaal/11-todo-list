@@ -4,7 +4,7 @@ function getHeader() {
   const header = newElement('div', 'header');
 
   const headerHeading = newElement('h1', 'header-heading', 'Doitdoit in Detroit City');
-  const headerAddButton = newElement('button', 'header-add-button', 'Add');
+  const headerAddButton = newElement('button', ['header-add-button', 'add-button'], 'Add', null, { addButton: 'todo' });
   header.appendChild(headerHeading);
   header.appendChild(headerAddButton);
 

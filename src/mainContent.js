@@ -9,10 +9,22 @@ function getMain() {
   const topMenu = newElement('ul', 'left-menu-inbox-menu', 'Inbox');
   leftMenuTop.appendChild(topMenu);
   leftMenuInner.appendChild(leftMenuTop);
+
   const leftMenuProjects = newElement('div', 'left-menu-projects');
-  const projectsMenu = newElement('ul', 'left-menu-projects-menu', 'Projects');
+  const projectsTitleContainer = newElement('div', 'projects-title-container');
+  const projectsTitle = newElement('h3', 'projects-title', 'Projects');
+  projectsTitleContainer.appendChild(projectsTitle);
+
+  leftMenuProjects.appendChild(projectsTitleContainer);
+  const projectsMenu = newElement('ul', 'left-menu-projects-menu');
   leftMenuProjects.appendChild(projectsMenu);
   leftMenuInner.appendChild(leftMenuProjects);
+
+  const addProjectContainer = newElement('div', 'add-project-container');
+  const addProjectBtn = newElement('button', ['add-project-btn', 'add-button'], 'Add', null, { addButton: 'project' });
+  addProjectContainer.appendChild(addProjectBtn);
+  leftMenuInner.appendChild(addProjectContainer);
+
   leftMenu.appendChild(leftMenuInner);
 
   const projectContainer = newElement('div', 'project-container');

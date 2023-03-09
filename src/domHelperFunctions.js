@@ -1,10 +1,16 @@
 import { parseJSON } from 'date-fns';
 import format from 'date-fns/format';
 
-function newElement(type, className, value, attrObj, dataObj) {
+function newElement(type, classes, value, attrObj, dataObj) {
   const tempElement = document.createElement(type);
-  if (className) {
-    tempElement.classList.add(className);
+  if (classes) {
+    if (Array.isArray(classes)) {
+      classes.forEach((elClass) => {
+        tempElement.classList.add(elClass);
+      });
+    } else {
+      tempElement.classList.add(classes);
+    }
   }
   if (value) {
     tempElement.textContent = value;
@@ -22,9 +28,9 @@ function newElement(type, className, value, attrObj, dataObj) {
   return tempElement;
 }
 
-function newMenuLi(name) {
-  const li = newElement('li');
-  const liButton = newElement('button', null, name);
+function newMenuLi(name, dataObj) {
+  const li = newElement('li', null, null, null, dataObj);
+  const liButton = newElement('button', null, name, null, dataObj);
   li.appendChild(liButton);
   return li;
 }

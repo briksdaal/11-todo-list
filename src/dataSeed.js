@@ -1,7 +1,7 @@
 import { add } from 'date-fns';
 
 const projectsData = {
-  currentProjectId: 4 + 5,
+  currentProjectId: 9 + 5,
   projectsListForExport: [
     {
       name: 'House Bijinesu',
@@ -14,7 +14,7 @@ const projectsData = {
   ],
 };
 const todoData = {
-  currentTodoId: 6 + 6,
+  currentTodoId: 17,
   todosListForExport: [
     {
       id: 1 + 6,
@@ -39,7 +39,7 @@ const todoData = {
       title: 'Swim',
       desc: 'This I really should be doing more',
       priority: 1,
-      dueDate: add(new Date(), { days: 7 }),
+      dueDate: add(new Date(), { days: 0 }),
       project: 3 + 5,
     },
     {
@@ -57,8 +57,53 @@ const todoData = {
       title: 'Clean the house',
       desc: 'It\'s really gotten quite dirty',
       priority: 1,
-      dueDate: add(new Date(), { days: 1 }),
+      dueDate: add(new Date(), { days: 6 }),
       project: 2 + 5,
+    },
+    {
+      id: 6 + 6,
+      dateAdded: add(new Date(), { days: 0 }),
+      title: 'Jump up andd down',
+      desc: 'More jumping more gooding',
+      priority: 1,
+      dueDate: add(new Date(), { days: 0 }),
+      project: 3 + 5,
+    },
+    {
+      id: 7 + 6,
+      dateAdded: add(new Date(), { days: 2 }),
+      title: 'Fix water in bathroom',
+      desc: 'Get\'s way too hot',
+      priority: 3,
+      dueDate: add(new Date(), { days: 21 }),
+      project: 2 + 5,
+    },
+    {
+      id: 8 + 6,
+      dateAdded: add(new Date(), { days: 0 }),
+      title: 'Sort out the shit in the stock room',
+      desc: 'Gonna have to happen one day',
+      priority: 3,
+      dueDate: add(new Date(), { days: 0 }),
+      project: 2 + 5,
+    },
+    {
+      id: 9 + 6,
+      dateAdded: add(new Date(), { days: 4 }),
+      title: 'Run on saturdays',
+      desc: 'Must be a good idea',
+      priority: 1,
+      dueDate: add(new Date(), { days: 6 }),
+      project: 3 + 5,
+    },
+    {
+      id: 10 + 6,
+      dateAdded: add(new Date(), { days: 6 }),
+      title: 'Stop smoking',
+      desc: 'Not a good lookout',
+      priority: 1,
+      dueDate: add(new Date(), { days: 1 }),
+      project: 3 + 5,
     },
   ],
 };
