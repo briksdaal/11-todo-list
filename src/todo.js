@@ -1,10 +1,12 @@
+import isValid from 'date-fns/isValid';
 import isDate from 'date-fns/isDate';
+import parseJSON from 'date-fns/parseJSON';
 
 class Todo {
   constructor(
     title = null,
     desc = null,
-    dueDate = null,
+    dueDate = new Date(),
     priority = null,
     dateAdded = new Date(),
     project = null,
@@ -34,13 +36,17 @@ class Todo {
     return Object.assign(
       new Todo(),
       json,
-      { dueDate: json.dueDate ? this.dateManager(json.dueDate) : null },
+      { dueDate: this.dateManager(json.dueDate) },
     );
   }
 
   static dateManager(date) {
-    if (isDate(date)) {
-      return JSON.parse(JSON.stringify(date));
+    const tempDate = parseJSON(JSON.stringify(date));
+    if (!isValid(tempDate)) {
+      return JSON.parse(JSON.stringify(new Date()));
+    }
+    if (isDate(tempDate)) {
+      return tempDate;
     }
 
     return date;

@@ -19,6 +19,32 @@ function getModal() {
 function getTodoForm() {
   const div = newElement('div');
 
+  const nameLabel = newElement('label', null, 'Name:', { for: 'name' });
+  const nameInput = newElement('input', null, null, { id: 'name', name: 'name', type: 'text' });
+  const descLabel = newElement('label', null, 'Description:', { for: 'desc' });
+  const descInput = newElement('textarea', null, null, { id: 'desc', name: 'desc', type: 'text' });
+  const priorityLabel = newElement('label', null, 'Priority:', { for: 'priority' });
+  const priorityInput = newElement('input', null, null, {
+    id: 'priority', name: 'priority', type: 'number', min: 1, max: 3,
+  });
+  const dueDateLabel = newElement('label', null, 'Due Date:', { for: 'dueDate' });
+  const dueDateInput = newElement('input', null, null, { id: 'dueDate', name: 'dueDate', type: 'date' });
+  const projectLabel = newElement('label', null, 'Project:', { for: 'project' });
+  const projectInput = newElement('select', null, null, { id: 'project', name: 'project' });
+  const option = newElement('option', null, 'Inbox', { value: 1 });
+  projectInput.appendChild(option);
+
+  div.appendChild(nameLabel);
+  div.appendChild(nameInput);
+  div.appendChild(descLabel);
+  div.appendChild(descInput);
+  div.appendChild(priorityLabel);
+  div.appendChild(priorityInput);
+  div.appendChild(dueDateLabel);
+  div.appendChild(dueDateInput);
+  div.appendChild(projectLabel);
+  div.appendChild(projectInput);
+
   return div;
 }
 function getProjectForm() {

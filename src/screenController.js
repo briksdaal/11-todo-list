@@ -1,7 +1,6 @@
+import parseISO from 'date-fns/parseISO';
 import { newElement, newMenuLi, newTodoLi } from './domHelperFunctions';
 import { $, $$, capitalize } from './helperFunctions';
-import Todo from './todo';
-import Project from './project';
 import TodoManager from './todoManager';
 import { getTodoForm, getProjectForm } from './modal';
 
@@ -94,18 +93,33 @@ class ScreenController {
     }
     if (adding === 'todo') {
       this.formInputs.appendChild(getTodoForm());
+      const projects = this.todoManagerInst.exportProjects();
+      const selectMenu = $('[data-adding="todo"] select');
+      projects.forEach((proj) => {
+        const option = newElement('option', null, proj.name, { value: proj.id });
+        selectMenu.appendChild(option);
+      });
     }
   }
 
   clickHandlerSubmit(e) {
-    if (e.target.tagName === 'BUTTON') {
-      e.preventDefault();
-      if (e.target.form.dataset.adding === 'project') {
-        const newProject = TodoManager.createProject({ name: e.target.form.name.value });
-        this.todoManagerInst.addProject(newProject);
-        this.updateProjectsMenu();
-        this.closeModal();
-      }
+    e.preventDefault();
+    if (e.target.form.dataset.adding === 'project') {
+      const newProject = TodoManager.createProject({ name: e.target.form.name.value });
+      this.todoManagerInst.addProject(newProject);
+      this.updateProjectsMenu();
+      this.closeModal();
+    } else if (e.target.form.dataset.adding === 'todo') {
+      const newTodo = TodoManager.createTodo({
+        title: e.target.form.name.value,
+        desc: e.target.form.desc.value,
+        priority: +e.target.form.priority.value,
+        dueDate: parseISO(e.target.form.dueDate.value),
+        project: +e.target.form.project.value,
+      });
+      this.todoManagerInst.addTodo(newTodo);
+      this.updateProjectContainer();
+      this.closeModal();
     }
   }
 
