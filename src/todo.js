@@ -36,7 +36,7 @@ class Todo {
     return Object.assign(
       new Todo(),
       json,
-      { dueDate: this.dateManager(json.dueDate) },
+      { dueDate: Todo.dateManager(json.dueDate) },
     );
   }
 
@@ -63,7 +63,11 @@ class Todo {
   }
 
   update(prop) {
-    Object.assign(this, prop);
+    Object.assign(
+      this,
+      prop,
+      { dueDate: Todo.dateManager(prop.dueDate) },
+    );
   }
 
   isCompleted() {

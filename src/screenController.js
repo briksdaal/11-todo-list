@@ -1,4 +1,4 @@
-import parseISO from 'date-fns/parseISO';
+import { parseJSON, parseISO, format } from 'date-fns';
 import { newElement, newMenuLi, newTodoLi } from './domHelperFunctions';
 import {
   $, $$, capitalize, parseBoolString,
@@ -9,6 +9,7 @@ import { getTodoForm, getProjectForm } from './modal';
 class ScreenController {
   constructor() {
     this.todoManagerInst = new TodoManager(true);
+    this.activeProject = 1;
     this.leftMenu = $('.left-menu-inner');
     this.inboxMenu = $('.left-menu-inbox-menu');
     this.projectsMenu = $('.left-menu-projects-menu');
@@ -20,14 +21,15 @@ class ScreenController {
     this.formTitle = $('.modal-title');
     this.formInputs = $('.inputs');
     this.submit = $('[type="submit"]');
+    this.closeModalBtn = $('.close-modal');
     this.updateScreen(1);
     this.setEventListeners();
   }
 
-  updateScreen(currentProjectId) {
+  updateScreen() {
     this.updateInboxMenu();
     this.updateProjectsMenu();
-    this.updateProjectContainer(currentProjectId);
+    this.updateProjectContainer();
   }
 
   updateInboxMenu() {
@@ -48,10 +50,10 @@ class ScreenController {
     });
   }
 
-  updateProjectContainer(currentProjectId, dateFilter) {
-    this.projectContainer.dataset.projectId = currentProjectId;
+  updateProjectContainer(dateFilter) {
+    this.projectContainer.dataset.projectId = this.activeProject;
 
-    const currentProject = this.todoManagerInst.findProject(currentProjectId);
+    const currentProject = this.todoManagerInst.findProject(this.activeProject);
     this.projectHeading.textContent = currentProject.getName();
 
     this.todosList.innerHTML = '';
@@ -80,77 +82,144 @@ class ScreenController {
     if (!e.target.dataset.projectId) {
       return;
     }
-    const { projectId } = e.target.dataset;
+    this.activeProject = e.target.dataset.projectId;
     const { dateFilter } = e.target.dataset;
 
-    this.updateProjectContainer(projectId, dateFilter);
+    this.updateProjectContainer(dateFilter);
   }
 
   clickHandlerAddBtn(e) {
-    this.modal.classList.remove('hidden');
-    const adding = e.target.dataset.addButton;
-    this.form.dataset.adding = adding;
-    this.formTitle.textContent = `Add ${capitalize(adding)}`;
-    this.formInputs.innerHTML = '';
-    if (adding === 'project') {
-      this.formInputs.appendChild(getProjectForm());
-    }
-    if (adding === 'todo') {
-      this.formInputs.appendChild(getTodoForm());
-      const projects = this.todoManagerInst.exportProjects();
-      const selectMenu = $('[data-adding="todo"] select');
-      projects.forEach((proj) => {
-        const option = newElement('option', null, proj.name, { value: proj.id });
-        selectMenu.appendChild(option);
-      });
-    }
+    this.openModal(e.target);
   }
 
   clickHandlerSubmit(e) {
     e.preventDefault();
-    if (e.target.form.dataset.adding === 'project') {
-      const newProject = TodoManager.createProject({ name: e.target.form.name.value });
-      this.todoManagerInst.addProject(newProject);
-      this.updateProjectsMenu();
-      this.closeModal();
-    } else if (e.target.form.dataset.adding === 'todo') {
-      const newTodo = TodoManager.createTodo({
-        title: e.target.form.name.value,
-        desc: e.target.form.desc.value,
-        priority: +e.target.form.priority.value,
-        dueDate: parseISO(e.target.form.dueDate.value),
-        project: +e.target.form.project.value,
-      });
-      this.todoManagerInst.addTodo(newTodo);
-      this.updateProjectContainer(this.projectContainer.dataset.projectId);
-      this.closeModal();
+    if (e.target.form.dataset.mode === 'adding') {
+      if (e.target.form.dataset.workingOn === 'project') {
+        const newProject = TodoManager.createProject({ name: e.target.form.name.value });
+        this.todoManagerInst.addProject(newProject);
+        this.updateProjectsMenu();
+        this.closeModal();
+      } else if (e.target.form.dataset.workingOn === 'todo') {
+        const newTodo = TodoManager.createTodo({
+          title: e.target.form.name.value,
+          desc: e.target.form.desc.value,
+          priority: +e.target.form.priority.value,
+          dueDate: parseISO(e.target.form.dueDate.value),
+          project: +e.target.form.project.value,
+        });
+        this.todoManagerInst.addTodo(newTodo);
+        this.updateProjectContainer();
+      }
     }
+
+    if (e.target.form.dataset.mode === 'editing') {
+      if (e.target.form.dataset.workingOn === 'todo') {
+        const { todoId } = e.target.form.dataset;
+        const todoItem = this.todoManagerInst.findTodo(todoId);
+        if (!todoItem) {
+          console.log('no todo item');
+        }
+        const prop = {
+          title: e.target.form.name.value,
+          desc: e.target.form.desc.value,
+          priority: +e.target.form.priority.value,
+          dueDate: parseISO(e.target.form.dueDate.value),
+        };
+
+        this.todoManagerInst.updateTodo(todoItem, prop);
+        const project = this.todoManagerInst.findProject(e.target.form.project.value);
+        if (!project) {
+          console.log('no project item');
+        }
+        this.todoManagerInst.changeTodoProject(todoItem, project);
+        this.updateProjectContainer();
+      }
+    }
+    this.closeModal();
   }
 
   clickHandlerTodosList(e) {
+    const todoLi = e.target.closest('li');
+    const { todoId } = todoLi.dataset;
+    const todoItem = this.todoManagerInst.findTodo(todoId);
+    if (!todoItem) {
+      return;
+    }
+
     if (e.target.classList.contains('todo-circle')) {
-      const todoLi = e.target.closest('li');
-      const { todoId } = todoLi.dataset;
-      const todoItem = this.todoManagerInst.findTodo(todoId);
       const completedState = parseBoolString(todoLi.dataset.completed);
       if (!completedState) {
         this.todoManagerInst.markTodoAsCompleted(todoItem);
       } else {
         this.todoManagerInst.markTodoAsUncompleted(todoItem);
       }
-      this.updateProjectContainer(this.projectContainer.dataset.projectId);
+      this.updateProjectContainer();
+    }
+
+    if (e.target.closest('div').classList.contains('edit-svg-container')) {
+      this.openModal(e.target.closest('div'));
+    }
+
+    if (e.target.closest('div').classList.contains('delete-svg-container')) {
+      this.todoManagerInst.removeTodo(todoItem);
+      this.updateProjectContainer();
     }
   }
 
   clickHandlerModal(e) {
-    if (!e.target.closest('.inner-modal')) {
+    if (!e.target.closest('.inner-modal') || e.target === this.closeModalBtn) {
       this.closeModal();
+    }
+  }
+
+  openModal(target) {
+    this.modal.classList.remove('hidden');
+
+    const { mode } = target.dataset;
+    const { workingOn } = target.dataset;
+    const { todoId } = target.dataset;
+
+    this.form.dataset.mode = mode;
+    this.form.dataset.workingOn = workingOn;
+    if (todoId) {
+      this.form.dataset.todoId = todoId;
+    }
+    this.formTitle.textContent = `${mode === 'adding' ? 'Add' : 'Edit'} ${capitalize(workingOn)}`;
+
+    this.formInputs.innerHTML = '';
+    if (workingOn === 'project') {
+      this.formInputs.appendChild(getProjectForm());
+    }
+    if (workingOn === 'todo') {
+      this.formInputs.appendChild(getTodoForm());
+      const projects = this.todoManagerInst.exportProjects();
+      const selectMenu = $('select.projects-select');
+      projects.forEach((proj) => {
+        const option = newElement('option', null, proj.name, { value: proj.id });
+        selectMenu.appendChild(option);
+      });
+
+      if (mode === 'editing') {
+        const todoItem = this.todoManagerInst.findTodo(todoId);
+        if (!todoItem) {
+          return;
+        }
+        this.form.name.value = todoItem.title;
+        this.form.desc.value = todoItem.desc;
+        this.form.priority.value = todoItem.priority;
+        this.form.dueDate.value = format(parseJSON(todoItem.dueDate), 'yyyy-MM-dd');
+        const currentOption = $(`select.projects-select option[value="${todoItem.project || 1}"]`);
+        currentOption.setAttribute('selected', 'selected');
+      }
     }
   }
 
   closeModal() {
     this.form.reset();
-    delete this.form.dataset.adding;
+    delete this.form.dataset.mode;
+    delete this.form.dataset.workingOn;
+    delete this.form.dataset.todoId;
     this.modal.classList.add('hidden');
   }
 }

@@ -21,7 +21,7 @@ function getMain() {
   leftMenuInner.appendChild(leftMenuProjects);
 
   const addProjectContainer = newElement('div', 'add-project-container');
-  const addProjectBtn = newElement('button', ['add-project-btn', 'add-button'], 'Add', null, { addButton: 'project' });
+  const addProjectBtn = newElement('button', ['add-project-btn', 'add-button'], 'Add', null, { workingOn: 'project', mode: 'adding' });
   addProjectContainer.appendChild(addProjectBtn);
   leftMenuInner.appendChild(addProjectContainer);
 
