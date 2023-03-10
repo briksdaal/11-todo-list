@@ -239,6 +239,8 @@ class ScreenController {
         const option = newElement('option', null, proj.name, { value: proj.id });
         selectMenu.appendChild(option);
       });
+      const currentOption = $(`select.projects-select option[value="${this.activeProject || 1}"]`);
+      currentOption.setAttribute('selected', 'selected');
 
       if (mode === 'editing') {
         const todoItem = this.todoManagerInst.findTodo(todoId);
