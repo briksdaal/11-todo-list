@@ -28,7 +28,7 @@ function getTodoForm() {
   const descInput = newElement('textarea', null, null, { id: 'desc', name: 'desc', type: 'text' });
   const priorityLabel = newElement('label', null, 'Priority:', { for: 'priority' });
   const priorityInput = newElement('input', null, null, {
-    id: 'priority', name: 'priority', type: 'number', min: 1, max: 3,
+    id: 'priority', name: 'priority', type: 'number', min: 0, max: 3,
   });
   const dueDateLabel = newElement('label', null, 'Due Date:', { for: 'dueDate' });
   const dueDateInput = newElement('input', null, null, { id: 'dueDate', name: 'dueDate', type: 'date' });

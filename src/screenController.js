@@ -156,6 +156,9 @@ class ScreenController {
 
   clickHandlerTodosList(e) {
     const todoLi = e.target.closest('li');
+    if (!todoLi) {
+      return;
+    }
     const { todoId } = todoLi.dataset;
     const todoItem = this.todoManagerInst.findTodo(todoId);
     if (!todoItem) {
