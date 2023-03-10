@@ -61,41 +61,58 @@ function createSvg(pathD) {
 
 function newMenuLi(name, dataObj, project) {
   const li = newElement('li', null, null, null, dataObj);
-  const liButton = newElement('button', null, name, null, dataObj);
+  const liButton = newElement('button', 'project-btn', name, null, dataObj);
 
   li.appendChild(liButton);
 
   if (project) {
+    const editSvgContainer = newElement('div', 'edit-svg-container', null, null, { workingOn: 'project', mode: 'editing', projectId: dataObj.projectId });
+    const editSvg = createSvg(mdiSquareEditOutline);
+    editSvgContainer.appendChild(editSvg);
     const deleteSvgContainer = newElement('div', 'delete-svg-container');
     const deleteSvg = createSvg(mdiTrashCanOutline);
     deleteSvgContainer.appendChild(deleteSvg);
+    li.appendChild(editSvgContainer);
     li.appendChild(deleteSvgContainer);
   }
 
   return li;
 }
 
+function priorityString(priorityNum) {
+  if (priorityNum === 1) return 'High';
+  if (priorityNum === 2) return 'Medium';
+  if (priorityNum === 3) return 'Low';
+  return 'No Rush';
+}
+
 function newTodoLi(todo) {
   const li = newElement('li', 'todo-li', null, null, { todoId: todo.id, completed: todo.completed });
-  const innerContainer = newElement('div', 'todo-container');
+  const mainContainer = newElement('div', 'todo-container');
   const completeCircle = newElement('div', 'todo-circle', null, null, { priority: todo.priority });
   const title = newElement('h3', 'todo-title', todo.title);
   const dueDate = newElement('p', 'todo-date', format(parseJSON(todo.dueDate), 'MMMM do'));
+  const details = newElement('div', 'details', 'Details');
   const editSvgContainer = newElement('div', 'edit-svg-container', null, null, { workingOn: 'todo', mode: 'editing', todoId: todo.id });
   const editSvg = createSvg(mdiSquareEditOutline);
   editSvgContainer.appendChild(editSvg);
   const deleteSvgContainer = newElement('div', 'delete-svg-container');
   const deleteSvg = createSvg(mdiTrashCanOutline);
   deleteSvgContainer.appendChild(deleteSvg);
-  innerContainer.appendChild(completeCircle);
-  innerContainer.appendChild(title);
-  innerContainer.appendChild(dueDate);
-  innerContainer.appendChild(editSvgContainer);
-  innerContainer.appendChild(deleteSvgContainer);
-  li.appendChild(innerContainer);
+  mainContainer.appendChild(completeCircle);
+  mainContainer.appendChild(title);
+  mainContainer.appendChild(dueDate);
+  mainContainer.appendChild(details);
+  mainContainer.appendChild(editSvgContainer);
+  mainContainer.appendChild(deleteSvgContainer);
+
+  const expandedInfoContainer = newElement('div', 'expanded-info');
+
+  li.appendChild(mainContainer);
+  li.appendChild(expandedInfoContainer);
   return li;
 }
 
 export {
-  newElement, newMenuLi, newTodoLi, createSvg,
+  newElement, newMenuLi, newTodoLi, createSvg, priorityString,
 };

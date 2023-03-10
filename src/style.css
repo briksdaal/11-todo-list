@@ -57,7 +57,16 @@ body {
   list-style: none;
 }
 
+.left-menu-projects-menu li {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: end;
+  grid-template-columns: 1fr auto auto;
+}
 
+.left-menu-projects-menu li button {
+  justify-self: start;
+}
 
 .project-container {
   padding: 30px 55px 30px 55px;
@@ -103,6 +112,14 @@ body {
   right: 1rem;
   line-height: 1rem;
   cursor: pointer;
+}
+
+form {
+  padding: 40px;
+}
+
+.inputs > div {
+  display: grid;
 }
 
 .todos-list {
@@ -162,7 +179,6 @@ body {
   background: var(--low-priority-bg);
 }
 
-
 .todo-li[data-completed="false"] .todo-circle:hover::before {
   content: "✓";
   font-size: 0.7rem;
@@ -178,5 +194,14 @@ body {
 }
 
 .todo-li svg:hover {
-  fill: var(--high-priority-border)
+  fill: var(--high-priority-border);
+}
+
+.todo-li .details {
+  user-select: none;
+}
+
+.todo-li .expanded-info {
+  display: grid;
+  grid-auto-flow: column;
 }

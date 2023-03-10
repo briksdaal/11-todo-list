@@ -1,5 +1,7 @@
 import { parseJSON, parseISO, format } from 'date-fns';
-import { newElement, newMenuLi, newTodoLi } from './domHelperFunctions';
+import {
+  newElement, newMenuLi, newTodoLi, priorityString,
+} from './domHelperFunctions';
 import {
   $, $$, capitalize, parseBoolString,
 } from './helperFunctions';
@@ -35,7 +37,7 @@ class ScreenController {
   updateInboxMenu() {
     const inbox = newMenuLi('Inbox', { projectId: 1, dateFilter: 0 });
     const today = newMenuLi('Today', { projectId: 1, dateFilter: 1 });
-    const upcoming = newMenuLi('Upcoming', { projectId: 1, dateFilter: 2 });
+    const upcoming = newMenuLi('Upcoming week', { projectId: 1, dateFilter: 2 });
     this.inboxMenu.appendChild(inbox);
     this.inboxMenu.appendChild(today);
     this.inboxMenu.appendChild(upcoming);
@@ -45,7 +47,10 @@ class ScreenController {
     this.projectsMenu.innerHTML = '';
     const projects = this.todoManagerInst.exportProjects();
     projects.forEach((project) => {
-      const projectLi = newMenuLi(project.name, { projectId: project.id, dateFilter: 0 });
+      const projectLi = newMenuLi(project.name, {
+        projectId: project.id,
+        dateFilter: 0,
+      }, true);
       this.projectsMenu.appendChild(projectLi);
     });
   }
@@ -79,13 +84,23 @@ class ScreenController {
   }
 
   clickHandlerProjectsMenu(e) {
-    if (!e.target.dataset.projectId) {
-      return;
-    }
-    this.activeProject = e.target.dataset.projectId;
-    const { dateFilter } = e.target.dataset;
+    if (e.target.classList.contains('project-btn')) {
+      this.activeProject = +e.target.dataset.projectId;
+      const { dateFilter } = e.target.dataset;
 
-    this.updateProjectContainer(dateFilter);
+      this.updateProjectContainer(dateFilter);
+    } else if (e.target.closest('div').classList.contains('edit-svg-container')) {
+      this.openModal(e.target.closest('div'));
+    } else if (e.target.closest('div').classList.contains('delete-svg-container')) {
+      const { projectId } = e.target.closest('li').dataset;
+      const projectItem = this.todoManagerInst.findProject(projectId);
+      this.todoManagerInst.removeProject(projectItem);
+      this.updateProjectsMenu();
+      if (this.activeProject === +projectId) {
+        this.activeProject = 1;
+        this.updateProjectContainer();
+      }
+    }
   }
 
   clickHandlerAddBtn(e) {
@@ -155,15 +170,29 @@ class ScreenController {
         this.todoManagerInst.markTodoAsUncompleted(todoItem);
       }
       this.updateProjectContainer();
-    }
-
-    if (e.target.closest('div').classList.contains('edit-svg-container')) {
+    } else if (e.target.closest('div').classList.contains('edit-svg-container')) {
       this.openModal(e.target.closest('div'));
-    }
-
-    if (e.target.closest('div').classList.contains('delete-svg-container')) {
+    } else if (e.target.closest('div').classList.contains('delete-svg-container')) {
       this.todoManagerInst.removeTodo(todoItem);
       this.updateProjectContainer();
+    } else if (e.target.closest('div').classList.contains('details')) {
+      const expandedInfo = todoLi.querySelector('.expanded-info');
+      const details = todoLi.querySelector('.details');
+      if (!expandedInfo.dataset.open) {
+        expandedInfo.dataset.open = true;
+        details.textContent = 'Hide';
+        const description = newElement('p', 'todo-desc', todoItem.desc);
+        const project = newElement('p', 'todo-project', this.todoManagerInst.findProject(todoItem.project).name);
+        const priority = newElement('p', 'todo-priority', priorityString(todoItem.priority));
+
+        expandedInfo.appendChild(description);
+        expandedInfo.appendChild(project);
+        expandedInfo.appendChild(priority);
+      } else {
+        delete expandedInfo.dataset.open;
+        details.textContent = 'Details';
+        expandedInfo.innerHTML = '';
+      }
     }
   }
 
@@ -179,7 +208,7 @@ class ScreenController {
     const { mode } = target.dataset;
     const { workingOn } = target.dataset;
     const { todoId } = target.dataset;
-
+    const { projectId } = target.dataset;
     this.form.dataset.mode = mode;
     this.form.dataset.workingOn = workingOn;
     if (todoId) {
@@ -190,6 +219,14 @@ class ScreenController {
     this.formInputs.innerHTML = '';
     if (workingOn === 'project') {
       this.formInputs.appendChild(getProjectForm());
+
+      if (mode === 'editing') {
+        const projectItem = this.todoManagerInst.findProject(projectId);
+        if (!projectItem) {
+          return;
+        }
+        this.form.name.value = projectItem.name;
+      }
     }
     if (workingOn === 'todo') {
       this.formInputs.appendChild(getTodoForm());

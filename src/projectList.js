@@ -60,7 +60,7 @@ class ProjectList {
   }
 
   findProject(projectIdToBeFound) {
-    if (projectIdToBeFound == null || projectIdToBeFound === 1) {
+    if (projectIdToBeFound == null || projectIdToBeFound === 1 || projectIdToBeFound === 0) {
       return this.defaultProject;
     }
     return this.list.find((item) => item.id === projectIdToBeFound);

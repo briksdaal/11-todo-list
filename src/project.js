@@ -61,6 +61,8 @@ class Project {
         dueDate: todo.dueDate,
         priority: todo.priority,
         completed: todo.completed,
+        desc: todo.desc,
+        project: this.name,
       }
     ))
       .sort((a, b) => {
