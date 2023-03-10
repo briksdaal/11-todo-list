@@ -53,7 +53,7 @@ function getTodoForm() {
 function getProjectForm() {
   const div = newElement('div');
   const label = newElement('label', null, 'Name:', { for: 'name' });
-  const input = newElement('input', null, null, { id: 'name', type: 'text' });
+  const input = newElement('input', null, null, { id: 'name', type: 'text', value: 'Project name' });
   div.appendChild(label);
   div.appendChild(input);
   return div;

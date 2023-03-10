@@ -31,7 +31,7 @@ class ScreenController {
   updateScreen() {
     this.updateInboxMenu();
     this.updateProjectsMenu();
-    this.updateProjectContainer();
+    this.updateProjectContainer(0);
   }
 
   updateInboxMenu() {
@@ -57,6 +57,7 @@ class ScreenController {
 
   updateProjectContainer(dateFilter) {
     this.projectContainer.dataset.projectId = this.activeProject;
+    this.projectContainer.dataset.dateFilter = dateFilter;
 
     const currentProject = this.todoManagerInst.findProject(this.activeProject);
     this.projectHeading.textContent = currentProject.getName();
@@ -67,6 +68,23 @@ class ScreenController {
       const todoLi = newTodoLi(todo);
       this.todosList.appendChild(todoLi);
     });
+
+    if (!currentTodos.length) {
+      const emptyProject = newElement(
+        'p',
+        'empty-project-prompt',
+        'This project seems to be empty! Add a task to get started.',
+      );
+      const addTaskButton = newElement(
+        'button',
+        ['empty-project-add-button', 'add-button'],
+        'Add task',
+        null,
+        { workingOn: 'todo', mode: 'adding' },
+      );
+      this.todosList.appendChild(emptyProject);
+      this.todosList.appendChild(addTaskButton);
+    }
   }
 
   setEventListeners() {
@@ -155,46 +173,50 @@ class ScreenController {
   }
 
   clickHandlerTodosList(e) {
+    const addBtn = e.target.closest('button.empty-project-add-button');
+    if (addBtn) {
+      this.openModal(addBtn);
+    }
+
     const todoLi = e.target.closest('li');
-    if (!todoLi) {
-      return;
-    }
-    const { todoId } = todoLi.dataset;
-    const todoItem = this.todoManagerInst.findTodo(todoId);
-    if (!todoItem) {
-      return;
-    }
-
-    if (e.target.classList.contains('todo-circle')) {
-      const completedState = parseBoolString(todoLi.dataset.completed);
-      if (!completedState) {
-        this.todoManagerInst.markTodoAsCompleted(todoItem);
-      } else {
-        this.todoManagerInst.markTodoAsUncompleted(todoItem);
+    if (todoLi) {
+      const { todoId } = todoLi.dataset;
+      const todoItem = this.todoManagerInst.findTodo(todoId);
+      if (!todoItem) {
+        return;
       }
-      this.updateProjectContainer();
-    } else if (e.target.closest('div').classList.contains('edit-svg-container')) {
-      this.openModal(e.target.closest('div'));
-    } else if (e.target.closest('div').classList.contains('delete-svg-container')) {
-      this.todoManagerInst.removeTodo(todoItem);
-      this.updateProjectContainer();
-    } else if (e.target.closest('div').classList.contains('details')) {
-      const expandedInfo = todoLi.querySelector('.expanded-info');
-      const details = todoLi.querySelector('.details');
-      if (!expandedInfo.dataset.open) {
-        expandedInfo.dataset.open = true;
-        details.textContent = 'Hide';
-        const description = newElement('p', 'todo-desc', todoItem.desc);
-        const project = newElement('p', 'todo-project', this.todoManagerInst.findProject(todoItem.project).name);
-        const priority = newElement('p', 'todo-priority', priorityString(todoItem.priority));
 
-        expandedInfo.appendChild(description);
-        expandedInfo.appendChild(project);
-        expandedInfo.appendChild(priority);
-      } else {
-        delete expandedInfo.dataset.open;
-        details.textContent = 'Details';
-        expandedInfo.innerHTML = '';
+      if (e.target.classList.contains('todo-circle')) {
+        const completedState = parseBoolString(todoLi.dataset.completed);
+        if (!completedState) {
+          this.todoManagerInst.markTodoAsCompleted(todoItem);
+        } else {
+          this.todoManagerInst.markTodoAsUncompleted(todoItem);
+        }
+        this.updateProjectContainer();
+      } else if (e.target.closest('div').classList.contains('edit-svg-container')) {
+        this.openModal(e.target.closest('div'));
+      } else if (e.target.closest('div').classList.contains('delete-svg-container')) {
+        this.todoManagerInst.removeTodo(todoItem);
+        this.updateProjectContainer(this.projectContainer.dataset.dateFilter);
+      } else if (e.target.closest('div').classList.contains('details')) {
+        const expandedInfo = todoLi.querySelector('.expanded-info');
+        const details = todoLi.querySelector('.details');
+        if (!expandedInfo.dataset.open) {
+          expandedInfo.dataset.open = true;
+          details.textContent = 'Hide';
+          const description = newElement('p', 'todo-desc', todoItem.desc);
+          const project = newElement('p', 'todo-project', this.todoManagerInst.findProject(todoItem.project).name);
+          const priority = newElement('p', 'todo-priority', priorityString(todoItem.priority));
+
+          expandedInfo.appendChild(description);
+          expandedInfo.appendChild(project);
+          expandedInfo.appendChild(priority);
+        } else {
+          delete expandedInfo.dataset.open;
+          details.textContent = 'Details';
+          expandedInfo.innerHTML = '';
+        }
       }
     }
   }
@@ -251,8 +273,8 @@ class ScreenController {
         this.form.desc.value = todoItem.desc;
         this.form.priority.value = todoItem.priority;
         this.form.dueDate.value = format(parseJSON(todoItem.dueDate), 'yyyy-MM-dd');
-        const currentOption = $(`select.projects-select option[value="${todoItem.project || 1}"]`);
-        currentOption.setAttribute('selected', 'selected');
+        const currentOptionEditing = $(`select.projects-select option[value="${todoItem.project || 1}"]`);
+        currentOptionEditing.setAttribute('selected', 'selected');
       }
     }
   }
