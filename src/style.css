@@ -168,6 +168,12 @@ h1 {
   fill: var(--high-priority-border);
 }
 
+.empty-project-menu {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  margin-left: 36px;
+}
+
 .add-project-container {
   margin-top: 18px;
   margin-left: 36px;

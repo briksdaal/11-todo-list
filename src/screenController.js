@@ -43,6 +43,10 @@ class ScreenController {
       }, true);
       this.projectsMenu.appendChild(projectLi);
     });
+    if (!projects.length) {
+      const emptyMenu = newElement('div', 'empty-project-menu', 'No projects yet, add one now!');
+      this.projectsMenu.appendChild(emptyMenu);
+    }
   }
 
   updateProjectContainer(dateFilter) {
@@ -150,7 +154,18 @@ class ScreenController {
     }
 
     if (e.target.form.dataset.mode === 'editing') {
-      if (e.target.form.dataset.workingOn === 'todo') {
+      if (e.target.form.dataset.workingOn === 'project') {
+        const { projectId } = e.target.form.dataset;
+        const projectItem = this.todoManagerInst.findProject(projectId);
+        if (!projectItem) {
+          console.log('no project item');
+        }
+        this.todoManagerInst.setProjectName(projectItem, e.target.form.name.value);
+        this.updateProjectsMenu();
+        if (this.activeProject === +projectId) {
+          this.updateProjectContainer(this.projectContainer.dataset.dateFilter);
+        }
+      } else if (e.target.form.dataset.workingOn === 'todo') {
         const { todoId } = e.target.form.dataset;
         const todoItem = this.todoManagerInst.findTodo(todoId);
         if (!todoItem) {
@@ -239,6 +254,9 @@ class ScreenController {
     if (todoId) {
       this.form.dataset.todoId = todoId;
     }
+    if (projectId) {
+      this.form.dataset.projectId = projectId;
+    }
     this.formTitle.textContent = `${mode === 'adding' ? 'Add' : 'Edit'} ${capitalize(workingOn)}`;
 
     this.formInputs.innerHTML = '';
@@ -284,6 +302,7 @@ class ScreenController {
     delete this.form.dataset.mode;
     delete this.form.dataset.workingOn;
     delete this.form.dataset.todoId;
+    delete this.form.dataset.projectId;
     this.modal.classList.add('hidden');
   }
 }

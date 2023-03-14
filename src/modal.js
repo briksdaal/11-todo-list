@@ -34,7 +34,7 @@ function getTodoForm() {
   const dueDateInput = newElement('input', null, null, { id: 'dueDate', name: 'dueDate', type: 'date' });
   const projectLabel = newElement('label', null, 'Project:', { for: 'project' });
   const projectInput = newElement('select', 'projects-select', null, { id: 'project', name: 'project' });
-  const option = newElement('option', null, 'Inbox', { value: 1 });
+  const option = newElement('option', null, 'All Tasks', { value: 1 });
   projectInput.appendChild(option);
 
   div.appendChild(nameLabel);
