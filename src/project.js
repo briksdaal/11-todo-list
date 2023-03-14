@@ -80,7 +80,7 @@ class Project {
       return tempTodos.filter((todo) => isToday(parseJSON(todo.dueDate)));
     }
     if (+filter === 2) {
-      const today = format(new Date(), 'i');
+      const today = format(new Date(), 'i') - 1;
       return tempTodos.filter(
         (todo) => isThisWeek(parseJSON(todo.dueDate), { weekStartsOn: today }),
       );

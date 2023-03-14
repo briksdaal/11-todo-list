@@ -1,6 +1,12 @@
 import { parseJSON } from 'date-fns';
 import format from 'date-fns/format';
-import { mdiTrashCanOutline, mdiSquareEditOutline } from '@mdi/js';
+import {
+  mdiTrashCanOutline,
+  mdiSquareEditOutline,
+  mdiInboxOutline,
+  mdiCalendarTodayOutline,
+  mdiCalendarMonthOutline,
+} from '@mdi/js';
 
 function newElement(type, classes, value, attrObj, dataObj) {
   const tempElement = document.createElement(type);
@@ -59,13 +65,24 @@ function createSvg(pathD) {
   return svg;
 }
 
-function newMenuLi(name, dataObj, project) {
+function newMenuLi(name, dataObj) {
   const li = newElement('li', null, null, null, dataObj);
   const liButton = newElement('button', 'project-btn', name, null, dataObj);
 
   li.appendChild(liButton);
 
-  if (project) {
+  if (dataObj.projectId === 1) {
+    let icon = null;
+    const { firstChild } = liButton;
+    if (dataObj.dateFilter === 0) {
+      icon = createSvg(mdiInboxOutline);
+    } else if (dataObj.dateFilter === 1) {
+      icon = createSvg(mdiCalendarTodayOutline);
+    } else if (dataObj.dateFilter === 2) {
+      icon = createSvg(mdiCalendarMonthOutline);
+    }
+    liButton.insertBefore(icon, firstChild);
+  } else {
     const editSvgContainer = newElement('div', 'edit-svg-container', null, null, { workingOn: 'project', mode: 'editing', projectId: dataObj.projectId });
     const editSvg = createSvg(mdiSquareEditOutline);
     editSvgContainer.appendChild(editSvg);
@@ -92,7 +109,6 @@ function newTodoLi(todo) {
   const completeCircle = newElement('div', 'todo-circle', null, null, { priority: todo.priority });
   const title = newElement('h3', 'todo-title', todo.title);
   const dueDate = newElement('p', 'todo-date', format(parseJSON(todo.dueDate), 'MMMM do'));
-  const details = newElement('div', 'details', 'Details');
   const editSvgContainer = newElement('div', 'edit-svg-container', null, null, { workingOn: 'todo', mode: 'editing', todoId: todo.id });
   const editSvg = createSvg(mdiSquareEditOutline);
   editSvgContainer.appendChild(editSvg);
@@ -102,7 +118,6 @@ function newTodoLi(todo) {
   mainContainer.appendChild(completeCircle);
   mainContainer.appendChild(title);
   mainContainer.appendChild(dueDate);
-  mainContainer.appendChild(details);
   mainContainer.appendChild(editSvgContainer);
   mainContainer.appendChild(deleteSvgContainer);
 

@@ -3,7 +3,7 @@ import Project from './project';
 class ProjectList {
   list = [];
 
-  defaultProject = new Project('Inbox');
+  defaultProject = new Project('All Tasks');
 
   findTodo(todoId) {
     return this.defaultProject.find(todoId);

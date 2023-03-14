@@ -1,4 +1,4 @@
-import { newElement } from './domHelperFunctions';
+import { newElement, createSvg, newMenuLi } from './domHelperFunctions';
 
 function getMain() {
   const main = newElement('div', 'main');
@@ -6,7 +6,16 @@ function getMain() {
   const leftMenu = newElement('div', 'left-menu');
   const leftMenuInner = newElement('div', 'left-menu-inner');
   const leftMenuTop = newElement('div', 'left-menu-top');
-  const topMenu = newElement('ul', 'left-menu-inbox-menu', 'Inbox');
+  const topMenu = newElement('ul', 'left-menu-inbox-menu');
+
+  const inbox = newMenuLi('All Tasks', { projectId: 1, dateFilter: 0 });
+  inbox.classList.add('active-project-li');
+  const today = newMenuLi('Today', { projectId: 1, dateFilter: 1 });
+  const upcoming = newMenuLi('Upcoming week', { projectId: 1, dateFilter: 2 });
+  topMenu.appendChild(inbox);
+  topMenu.appendChild(today);
+  topMenu.appendChild(upcoming);
+
   leftMenuTop.appendChild(topMenu);
   leftMenuInner.appendChild(leftMenuTop);
 

@@ -13,7 +13,6 @@ class ScreenController {
     this.todoManagerInst = new TodoManager(true);
     this.activeProject = 1;
     this.leftMenu = $('.left-menu-inner');
-    this.inboxMenu = $('.left-menu-inbox-menu');
     this.projectsMenu = $('.left-menu-projects-menu');
     this.projectContainer = $('.project-container');
     this.projectHeading = $('.project-heading');
@@ -24,23 +23,14 @@ class ScreenController {
     this.formInputs = $('.inputs');
     this.submit = $('[type="submit"]');
     this.closeModalBtn = $('.close-modal');
+    this.activeProjectLi = $('.left-menu-inbox-menu li:first-of-type');
     this.updateScreen(1);
     this.setEventListeners();
   }
 
   updateScreen() {
-    this.updateInboxMenu();
     this.updateProjectsMenu();
     this.updateProjectContainer(0);
-  }
-
-  updateInboxMenu() {
-    const inbox = newMenuLi('Inbox', { projectId: 1, dateFilter: 0 });
-    const today = newMenuLi('Today', { projectId: 1, dateFilter: 1 });
-    const upcoming = newMenuLi('Upcoming week', { projectId: 1, dateFilter: 2 });
-    this.inboxMenu.appendChild(inbox);
-    this.inboxMenu.appendChild(today);
-    this.inboxMenu.appendChild(upcoming);
   }
 
   updateProjectsMenu() {
@@ -60,7 +50,13 @@ class ScreenController {
     this.projectContainer.dataset.dateFilter = dateFilter;
 
     const currentProject = this.todoManagerInst.findProject(this.activeProject);
-    this.projectHeading.textContent = currentProject.getName();
+    if (+dateFilter === 1) {
+      this.projectHeading.textContent = 'Today';
+    } else if (+dateFilter === 2) {
+      this.projectHeading.textContent = 'Upcoming Week';
+    } else {
+      this.projectHeading.textContent = currentProject.getName();
+    }
 
     this.todosList.innerHTML = '';
     const currentTodos = currentProject.getTodosForScreen(dateFilter);
@@ -78,7 +74,7 @@ class ScreenController {
       const addTaskButton = newElement(
         'button',
         ['empty-project-add-button', 'add-button'],
-        'Add task',
+        'Add Task',
         null,
         { workingOn: 'todo', mode: 'adding' },
       );
@@ -102,12 +98,7 @@ class ScreenController {
   }
 
   clickHandlerProjectsMenu(e) {
-    if (e.target.classList.contains('project-btn')) {
-      this.activeProject = +e.target.dataset.projectId;
-      const { dateFilter } = e.target.dataset;
-
-      this.updateProjectContainer(dateFilter);
-    } else if (e.target.closest('div').classList.contains('edit-svg-container')) {
+    if (e.target.closest('div').classList.contains('edit-svg-container')) {
       this.openModal(e.target.closest('div'));
     } else if (e.target.closest('div').classList.contains('delete-svg-container')) {
       const { projectId } = e.target.closest('li').dataset;
@@ -116,8 +107,20 @@ class ScreenController {
       this.updateProjectsMenu();
       if (this.activeProject === +projectId) {
         this.activeProject = 1;
+        this.activeProjectLi = $('.left-menu-inbox-menu li:first-of-type');
+        this.activeProjectLi.classList.add('active-project-li');
         this.updateProjectContainer();
       }
+    } else if (e.target.classList.contains('project-btn')) {
+      this.activeProject = +e.target.dataset.projectId;
+      const { dateFilter } = e.target.dataset;
+
+      const projectLi = e.target.closest('li');
+      this.activeProjectLi.classList.remove('active-project-li');
+      this.activeProjectLi = projectLi;
+      this.activeProjectLi.classList.add('active-project-li');
+
+      this.updateProjectContainer(dateFilter);
     }
   }
 
@@ -142,7 +145,7 @@ class ScreenController {
           project: +e.target.form.project.value,
         });
         this.todoManagerInst.addTodo(newTodo);
-        this.updateProjectContainer();
+        this.updateProjectContainer(this.projectContainer.dataset.dateFilter);
       }
     }
 
@@ -166,7 +169,7 @@ class ScreenController {
           console.log('no project item');
         }
         this.todoManagerInst.changeTodoProject(todoItem, project);
-        this.updateProjectContainer();
+        this.updateProjectContainer(this.projectContainer.dataset.dateFilter);
       }
     }
     this.closeModal();
@@ -199,22 +202,19 @@ class ScreenController {
       } else if (e.target.closest('div').classList.contains('delete-svg-container')) {
         this.todoManagerInst.removeTodo(todoItem);
         this.updateProjectContainer(this.projectContainer.dataset.dateFilter);
-      } else if (e.target.closest('div').classList.contains('details')) {
+      } else if (e.target.closest('div').classList.contains('todo-container')) {
         const expandedInfo = todoLi.querySelector('.expanded-info');
-        const details = todoLi.querySelector('.details');
         if (!expandedInfo.dataset.open) {
           expandedInfo.dataset.open = true;
-          details.textContent = 'Hide';
           const description = newElement('p', 'todo-desc', todoItem.desc);
           const project = newElement('p', 'todo-project', this.todoManagerInst.findProject(todoItem.project).name);
-          const priority = newElement('p', 'todo-priority', priorityString(todoItem.priority));
+          const priority = newElement('p', 'todo-priority', priorityString(todoItem.priority), null, { priority: todoItem.priority });
 
           expandedInfo.appendChild(description);
           expandedInfo.appendChild(project);
           expandedInfo.appendChild(priority);
         } else {
           delete expandedInfo.dataset.open;
-          details.textContent = 'Details';
           expandedInfo.innerHTML = '';
         }
       }
