@@ -3,7 +3,7 @@ import {
   newElement, newMenuLi, newTodoLi, priorityString,
 } from './domHelperFunctions';
 import {
-  $, $$, capitalize, parseBoolString,
+  $, $$, parseBoolString,
 } from './helperFunctions';
 import TodoManager from './todoManager';
 import { getTodoForm, getProjectForm } from './modal';

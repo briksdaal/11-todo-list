@@ -12,7 +12,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Todo List',
     }),
-    // new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin(),
   ],
   devServer: {
     static: './dist',

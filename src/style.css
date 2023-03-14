@@ -51,7 +51,7 @@ button,
   background-color: var(--color-header);
   color: var(--color-white);
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
 }
 
@@ -193,8 +193,7 @@ h1 {
 /** project container styles **/
 .project-container {
   padding: 30px 55px 30px 55px;
-  min-width: 600px;
-  margin: 0 auto;
+  max-width: 1100px;
 }
 
 .project-container h2 {
@@ -416,7 +415,9 @@ form {
   display: grid;
 }
 
-form input, form textarea, form select {
+form input,
+form textarea,
+form select {
   border: 1px solid #ddd;
   background: none;
   border-radius: 5px;
@@ -425,7 +426,9 @@ form input, form textarea, form select {
   outline: none;
 }
 
-form input:focus-visible, form textarea:focus-visible, form select:focus-visible {
+form input:focus-visible,
+form textarea:focus-visible,
+form select:focus-visible {
   border-color: #000;
 }
 
@@ -444,6 +447,19 @@ form button[type="submit"] {
   display: grid;
 }
 
-.inputs label, .inputs input, .inputs textarea, .inputs select {
+.inputs label,
+.inputs input,
+.inputs textarea,
+.inputs select,
+.inputs .priority-title,
+.inputs .priority-inner-div {
   margin-bottom: 8px;
+}
+
+.priority-div input {
+  margin-right: 4px;
+}
+
+.priority-div label {
+  margin-right: 18px;
 }

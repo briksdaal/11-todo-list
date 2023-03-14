@@ -26,10 +26,36 @@ function getTodoForm() {
   const nameInput = newElement('input', null, null, { id: 'name', name: 'name', type: 'text' });
   const descLabel = newElement('label', null, 'Description:', { for: 'desc' });
   const descInput = newElement('textarea', null, null, { id: 'desc', name: 'desc', type: 'text' });
-  const priorityLabel = newElement('label', null, 'Priority:', { for: 'priority' });
-  const priorityInput = newElement('input', null, null, {
-    id: 'priority', name: 'priority', type: 'number', min: 0, max: 3,
+  // const priorityLabel = newElement('label', null, 'Priority:', { for: 'priority' });
+  // const priorityInput = newElement('input', null, null, {
+  //   id: 'priority', name: 'priority', type: 'number', min: 0, max: 3,
+  // });
+
+  const priorityDiv = newElement('div', 'priority-div');
+  const priorityTitle = newElement('div', 'priority-title', 'Priority:');
+  const priorityInnerDiv = newElement('div', 'priority-inner-div');
+
+  const priorities = [
+    { literal: 'No Rush', value: 0 },
+    { literal: 'Low', value: 3 },
+    { literal: 'Medium', value: 2 },
+    { literal: 'High', value: 1 },
+  ];
+
+  priorities.forEach((priority) => {
+    const radioInput = newElement('input', null, null, {
+      type: 'radio',
+      id: priority.literal,
+      value: priority.value,
+      name: 'priority',
+    });
+    const radioLabel = newElement('label', null, priority.literal, { for: priority.literal });
+    priorityInnerDiv.appendChild(radioInput);
+    priorityInnerDiv.appendChild(radioLabel);
   });
+  priorityDiv.appendChild(priorityTitle);
+  priorityDiv.appendChild(priorityInnerDiv);
+
   const dueDateLabel = newElement('label', null, 'Due Date:', { for: 'dueDate' });
   const dueDateInput = newElement('input', null, null, { id: 'dueDate', name: 'dueDate', type: 'date' });
   const projectLabel = newElement('label', null, 'Project:', { for: 'project' });
@@ -41,8 +67,9 @@ function getTodoForm() {
   div.appendChild(nameInput);
   div.appendChild(descLabel);
   div.appendChild(descInput);
-  div.appendChild(priorityLabel);
-  div.appendChild(priorityInput);
+  div.appendChild(priorityDiv);
+  // div.appendChild(priorityLabel);
+  // div.appendChild(priorityInput);
   div.appendChild(dueDateLabel);
   div.appendChild(dueDateInput);
   div.appendChild(projectLabel);
