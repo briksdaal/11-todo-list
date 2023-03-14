@@ -193,8 +193,13 @@ h1 {
 /** project container styles **/
 .project-container {
   padding: 30px 55px 30px 55px;
-  width: 1000px;
+  min-width: 600px;
   margin: 0 auto;
+}
+
+.project-container h2 {
+  font-size: 1.2rem;
+  margin-bottom: 18px;
 }
 
 .todos-list {
@@ -211,6 +216,25 @@ h1 {
   grid-template-columns: auto 1fr auto;
 }
 
+.todo-container h3 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.todo-container p {
+  font-size: 0.8rem;
+}
+
+.todo-li:first-of-type {
+  border-top: 1px solid var(--color-footer-grey);
+}
+
+.todo-li {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-footer-grey);
+}
+
 .todo-li[data-completed="true"] .todo-container {
   color: #8f8f8f;
   fill: #8f8f8f;
@@ -218,6 +242,10 @@ h1 {
 
 .todo-li[data-completed="true"] .todo-title {
   text-decoration: line-through;
+}
+
+.todo-li .todo-title {
+  position: relative;
 }
 
 .todo-date {
@@ -270,7 +298,8 @@ h1 {
   cursor: pointer;
 }
 
-.todo-li svg:hover {
+.todo-li .edit-svg-container svg:hover,
+.todo-li .delete-svg-container svg:hover {
   fill: var(--high-priority-border);
 }
 
@@ -281,6 +310,58 @@ h1 {
 .todo-li .expanded-info {
   display: grid;
   grid-auto-flow: column;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.todo-li.open-todo .expanded-info {
+  margin-top: 14px;
+}
+
+.todo-li .expanded-info .todo-project {
+  border: 1px solid #6b6b6b;
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+
+.todo-li .expanded-info .todo-priority {
+  border: 1px solid;
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+
+.todo-li .expanded-info .todo-priority[data-priority="0"] {
+  color: grey;
+  border-color: grey;
+}
+
+.todo-li .expanded-info .todo-priority[data-priority="1"] {
+  color: var(--high-priority-border);
+  border-color: var(--high-priority-border);
+}
+
+.todo-li .expanded-info .todo-priority[data-priority="2"] {
+  color: var(--mid-priority-border);
+  border-color: var(--mid-priority-border);
+}
+
+.todo-li .expanded-info .todo-priority[data-priority="3"] {
+  color: var(--low-priority-border);
+  border-color: var(--low-priority-border);
+}
+
+.todo-li h3 span {
+  padding-right: 5px;
+}
+
+.todo-li h3 svg {
+  position: absolute;
+  top: 2px;
+}
+
+.todo-li.open-todo h3 svg {
+  transform: rotate(90deg) !important;
 }
 
 /*** footer styles ***/

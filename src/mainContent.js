@@ -1,4 +1,4 @@
-import { newElement, createSvg, newMenuLi } from './domHelperFunctions';
+import { newElement, newMenuLi } from './domHelperFunctions';
 
 function getMain() {
   const main = newElement('div', 'main');

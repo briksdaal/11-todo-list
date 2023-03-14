@@ -24,7 +24,7 @@ class ScreenController {
     this.submit = $('[type="submit"]');
     this.closeModalBtn = $('.close-modal');
     this.activeProjectLi = $('.left-menu-inbox-menu li:first-of-type');
-    this.updateScreen(1);
+    this.updateScreen();
     this.setEventListeners();
   }
 
@@ -50,6 +50,7 @@ class ScreenController {
   }
 
   updateProjectContainer(dateFilter) {
+    // dateFilter : 0 = all, 1 = today, 2 = upcoming week
     this.projectContainer.dataset.projectId = this.activeProject;
     this.projectContainer.dataset.dateFilter = dateFilter;
 
@@ -220,6 +221,7 @@ class ScreenController {
       } else if (e.target.closest('div').classList.contains('todo-container')) {
         const expandedInfo = todoLi.querySelector('.expanded-info');
         if (!expandedInfo.dataset.open) {
+          todoLi.classList.add('open-todo');
           expandedInfo.dataset.open = true;
           const description = newElement('p', 'todo-desc', todoItem.desc);
           const project = newElement('p', 'todo-project', this.todoManagerInst.findProject(todoItem.project).name);
@@ -229,6 +231,7 @@ class ScreenController {
           expandedInfo.appendChild(project);
           expandedInfo.appendChild(priority);
         } else {
+          todoLi.classList.remove('open-todo');
           delete expandedInfo.dataset.open;
           expandedInfo.innerHTML = '';
         }

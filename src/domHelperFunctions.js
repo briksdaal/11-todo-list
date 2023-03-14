@@ -6,6 +6,7 @@ import {
   mdiInboxOutline,
   mdiCalendarTodayOutline,
   mdiCalendarMonthOutline,
+  mdiChevronRight,
 } from '@mdi/js';
 
 function newElement(type, classes, value, attrObj, dataObj) {
@@ -107,7 +108,11 @@ function newTodoLi(todo) {
   const li = newElement('li', 'todo-li', null, null, { todoId: todo.id, completed: todo.completed });
   const mainContainer = newElement('div', 'todo-container');
   const completeCircle = newElement('div', 'todo-circle', null, null, { priority: todo.priority });
-  const title = newElement('h3', 'todo-title', todo.title);
+  const title = newElement('h3', 'todo-title');
+  const span = newElement('span', null, todo.title);
+  const chevron = createSvg(mdiChevronRight);
+  title.appendChild(span);
+  title.appendChild(chevron);
   const dueDate = newElement('p', 'todo-date', format(parseJSON(todo.dueDate), 'MMMM do'));
   const editSvgContainer = newElement('div', 'edit-svg-container', null, null, { workingOn: 'todo', mode: 'editing', todoId: todo.id });
   const editSvg = createSvg(mdiSquareEditOutline);
