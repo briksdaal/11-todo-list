@@ -10,7 +10,7 @@ import { getTodoForm, getProjectForm } from './modal';
 
 class ScreenController {
   constructor() {
-    this.todoManagerInst = new TodoManager(true);
+    this.todoManagerInst = new TodoManager();
     this.activeProject = 1;
     this.leftMenu = $('.left-menu-inner');
     this.projectsMenu = $('.left-menu-projects-menu');
