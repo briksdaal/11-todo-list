@@ -391,6 +391,7 @@ h1 {
   width: 700px;
   height: 600px;
   background: var(--color-white);
+  border-radius: 8px;
 }
 
 .hidden {
@@ -406,10 +407,43 @@ h1 {
   cursor: pointer;
 }
 
+.modal-title {
+  margin-bottom: 12px;
+}
+
 form {
-  padding: 40px;
+  padding: 30px 40px;
+  display: grid;
+}
+
+form input, form textarea, form select {
+  border: 1px solid #ddd;
+  background: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  padding: 8px;
+  outline: none;
+}
+
+form input:focus-visible, form textarea:focus-visible, form select:focus-visible {
+  border-color: #000;
+}
+
+form button[type="submit"] {
+  justify-self: end;
+  background: var(--high-priority-border);
+  color: var(--color-white);
+  border: 1px solid var(--high-priority-border);
+  font-weight: 500;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 5px;
 }
 
 .inputs > div {
   display: grid;
+}
+
+.inputs label, .inputs input, .inputs textarea, .inputs select {
+  margin-bottom: 8px;
 }

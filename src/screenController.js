@@ -260,7 +260,7 @@ class ScreenController {
     if (projectId) {
       this.form.dataset.projectId = projectId;
     }
-    this.formTitle.textContent = `${mode === 'adding' ? 'Add' : 'Edit'} ${capitalize(workingOn)}`;
+    this.formTitle.textContent = `${mode === 'adding' ? 'Add' : 'Edit'} ${workingOn === 'todo' ? 'Task' : 'Project'}`;
 
     this.formInputs.innerHTML = '';
     if (workingOn === 'project') {
